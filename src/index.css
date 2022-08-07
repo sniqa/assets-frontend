@@ -1,0 +1,45 @@
+/* a标签的默认样式 */
+a {
+	text-decoration: none;
+}
+/* 导航项 */
+.nav-item-selected {
+	background-color: #e9eef3;
+	position: relative;
+}
+.nav-item-selected::before {
+	position: absolute;
+	display: block;
+	content: '';
+	background-color: #0067c0;
+	width: 3px;
+	left: 0;
+	height: 1.2rem;
+	border-radius: 15px;
+	animation: nav-item-selected-before 0.5s;
+}
+@keyframes nav-item-selected-before {
+	from {
+		height: 0;
+	}
+	to {
+		height: 1.2rem;
+	}
+}
+
+.nav-item-hover:hover {
+	background-color: #e9eef3;
+}
+.width-translate {
+	transition: width 0.5s;
+}
+.border-bottom {
+	border-bottom: 1px solid rgb(214, 207, 207);
+}
+
+.table-height-normal {
+	height: calc(100vh - 2rem - 3rem - 4rem - 6rem);
+}
+.table-height-expends {
+	height: calc(100vh - 2rem - 3rem - 4rem - 6rem - 8rem);
+}
