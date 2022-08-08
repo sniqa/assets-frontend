@@ -37,9 +37,16 @@ a {
 	border-bottom: 1px solid rgb(214, 207, 207);
 }
 
-.table-height-normal {
-	height: calc(100vh - 2rem - 3rem - 4rem - 6rem);
+
+.table-body-height-normal {
+	height: calc(100vh - 2rem - 3rem - 4rem - 16rem);
 }
-.table-height-expends {
-	height: calc(100vh - 2rem - 3rem - 4rem - 6rem - 8rem);
+.table-body-height-expends {
+	height: calc(100vh - 2rem - 3rem - 4rem - 22rem);
+}
+.table-body-width-normal {
+	width: calc(100vw - 2rem - 20rem);
+}
+.table-body-width-expends {
+	width: calc(100vw - 2rem - 7rem);
 }

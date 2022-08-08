@@ -6,10 +6,13 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import FilterListOffIcon from '@mui/icons-material/FilterListOff'
 import SearchIcon from '@mui/icons-material/Search'
 import SearchOffIcon from '@mui/icons-material/SearchOff'
-import { AccordionSummary, IconButton, Tooltip } from '@mui/material'
-import MuiAccordion, { AccordionProps } from '@mui/material/Accordion'
-import MuiAccordionDetails from '@mui/material/AccordionDetails'
-import { styled } from '@mui/material/styles'
+import {
+	Accordion,
+	AccordionDetails,
+	AccordionSummary,
+	IconButton,
+	Tooltip,
+} from '@mui/material'
 import Typography from '@mui/material/Typography'
 import * as React from 'react'
 
@@ -19,23 +22,6 @@ const DELETE_SELECTION_ROWS_TOOLTIP = '删除所选'
 const ADD_TOOLTIP = '添加'
 const FILE_DOWNLOAD_TOOLTIP = '导出至csv文件'
 const FILE_UPLOAD_TOOLTIP = '导入文件'
-
-const Accordion = styled((props: AccordionProps) => (
-	<MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
-	border: `1px solid ${theme.palette.divider}`,
-	'&:not(:last-child)': {
-		borderBottom: 0,
-	},
-	'&:before': {
-		display: 'none',
-	},
-}))
-
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-	padding: theme.spacing(2),
-	borderTop: '1px solid rgba(0, 0, 0, .125)',
-}))
 
 interface TableToolbarExtension {
 	icon: JSX.Element
@@ -55,6 +41,9 @@ const CustomizedAccordions = ({ extensions }: TableToolbarProps) => {
 	return (
 		<div>
 			<Accordion
+				disableGutters
+				elevation={0}
+				square
 				expanded={expanded}
 				// onChange={handleChange('panel1')}
 			>

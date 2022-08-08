@@ -2,18 +2,62 @@ import './index.css'
 
 import {
 	ColumnDef,
-	flexRender,
 	getCoreRowModel,
 	useReactTable,
 } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import CuzomTable from './CuzomTable'
 import { makeData, Person } from './makeData'
+import TableFooter from './TableFooter'
+import TableToolbar from './TableToolbar'
 
 const columns: ColumnDef<Person>[] = [
 	{
 		header: 'Name',
 		footer: (props) => props.column.id,
 		columns: [
+			{
+				accessorKey: 'firstName',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+			},
+			{
+				accessorKey: 'firstName',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+			},
+
+			{
+				accessorKey: 'firstName',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+			},
+
+			{
+				accessorKey: 'firstName',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+			},
+			{
+				accessorKey: 'firstName',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+			},
+			{
+				accessorKey: 'firstName',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+			},
+			{
+				accessorKey: 'firstName',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+			},
+			{
+				accessorKey: 'firstName',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+			},
 			{
 				accessorKey: 'firstName',
 				cell: (info) => info.getValue(),
@@ -73,67 +117,24 @@ export default function App() {
 		debugTable: true,
 		debugHeaders: true,
 		debugColumns: true,
+		manualPagination: true,
 	})
 
 	return (
-		<div
-			className={`p-2 block max-w-full overflow-auto max-h-full ${
-				true ? 'table-height-normal' : 'table-height-expends'
-			}`}
-		>
-			<div className="h-2" />
-			<table className="w-full overflow-auto h-3/5">
-				<thead className="w-full">
-					{table.getHeaderGroups().map((headerGroup) => (
-						<tr key={headerGroup.id}>
-							{headerGroup.headers.map((header) => {
-								return (
-									<th
-										key={header.id}
-										colSpan={header.colSpan}
-										style={{ position: 'relative', width: header.getSize() }}
-									>
-										{header.isPlaceholder
-											? null
-											: flexRender(
-													header.column.columnDef.header,
-													header.getContext()
-											  )}
-										{header.column.getCanResize() && (
-											<div
-												onMouseDown={header.getResizeHandler()}
-												onTouchStart={header.getResizeHandler()}
-												className={`resizer ${
-													header.column.getIsResizing() ? 'isResizing' : ''
-												}`}
-											></div>
-										)}
-									</th>
-								)
-							})}
-						</tr>
-					))}
-				</thead>
-				<tbody className="overflow-auto h-2/5">
-					{table.getRowModel().rows.map((row) => {
-						return (
-							<tr key={row.id} className={`w-full`}>
-								{row.getVisibleCells().map((cell) => {
-									return (
-										<td key={cell.id} style={{ width: cell.column.getSize() }}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext()
-											)}
-										</td>
-									)
-								})}
-							</tr>
-						)
-					})}
-				</tbody>
-			</table>
-			<div className="h-4" />
+		<div className="flex-grow inline-flex flex-col bg-light-50 rounded-2xl overflow-hidden p-2">
+			<TableToolbar />
+
+			<div className="h-full overflow-x-auto">
+				<CuzomTable table={table} />
+			</div>
+
+			<TableFooter
+				pageIndex={table.getState().pagination.pageIndex}
+				pageSize={table.getState().pagination.pageSize}
+				setPageIndex={table.setPageIndex}
+				setPageSize={table.setPageSize}
+				rowCount={0}
+			/>
 		</div>
 	)
 }
