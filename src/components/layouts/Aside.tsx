@@ -8,8 +8,6 @@ import { IconButton, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 import { Link, useMatch } from 'react-router-dom'
 import { RouterPath } from '../../router/path'
-import { useAppDispatch } from '../../store'
-import { widthZoom } from '../../store/tableBodySize'
 interface LeftSidebarItemProps {
 	icon?: JSX.Element
 	title: string
@@ -63,8 +61,6 @@ const settings: LeftSidebarItemProps = {
 const LeftSidebarNav = () => {
 	const [shrink, setShrink] = useState(true)
 
-	const dispatch = useAppDispatch()
-
 	return (
 		<div
 			className={`${
@@ -76,7 +72,6 @@ const LeftSidebarNav = () => {
 					<IconButton
 						onClick={() => {
 							setShrink(!shrink)
-							dispatch(widthZoom())
 						}}
 					>
 						{shrink ? <ZoomInMapIcon /> : <ZoomOutMapIcon />}
