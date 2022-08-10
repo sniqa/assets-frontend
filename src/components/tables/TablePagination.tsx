@@ -1,48 +1,42 @@
-import { TablePagination as Pagination, Typography } from "@mui/material";
-import React from "react";
+import { TablePagination, Typography } from '@mui/material'
+import { Pagination } from '@table-library/react-table-library/pagination'
 
-const TablePagination = () => {
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+interface TablePaginationProps {
+	count: number
+	selected?: number
+	pagination: Pagination
+}
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
+const TableFooter = (props: TablePaginationProps) => {
+	const { count, pagination, selected = 0 } = props
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+	return (
+		<div className="w-full flex items-center justify-between pl-2">
+			<section className="flex">
+				<Typography color={'primary'} className={`px-2`}>
+					{selected}
+				</Typography>
+				<Typography>{` of `}</Typography>
+				<Typography color={'primary'} className={`px-2`}>
+					{count}
+				</Typography>
+				<Typography>{` rows selected`}</Typography>
+			</section>
 
-  return (
-    <div className="w-full flex items-center justify-between h-3rem pl-2">
-        <section className="flex"> 
-            <Typography>{0}</Typography>
-            <Typography>{` of `}</Typography>
-            <Typography>{0}</Typography>
-            <Typography>{` rows select`}</Typography>
-        </section>
+			<section>
+				<TablePagination
+					component="div"
+					count={count}
+					page={pagination.state.page}
+					rowsPerPage={pagination.state.size}
+					onPageChange={(event, page) => pagination.fns.onSetPage(page)}
+					onRowsPerPageChange={(event) =>
+						pagination.fns.onSetSize(parseInt(event.target.value, 10))
+					}
+				/>
+			</section>
+		</div>
+	)
+}
 
-
-        <section> 
-            <Pagination
-            component="div"
-            count={100}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-        </section>
-
-    
-    </div>
-  );
-};
-
-export default TablePagination;
+export default TableFooter
