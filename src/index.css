@@ -38,7 +38,7 @@ a {
 }
 
 .table-height-normal {
-	height: calc(100vh - 2rem - 3rem - 4rem - 1rem);
+	height: calc(100vh - 2rem - 3rem - 4rem - 8rem);
 }
 .table-body-height-normal {
 	height: calc(100vh - 2rem - 3rem - 4rem - 16rem);
@@ -51,4 +51,14 @@ a {
 }
 .table-body-width-expends {
 	width: calc(100vw - 2rem - 7rem);
+}
+
+:root {
+	--scrollbar-track: #d1d5db;
+	--scrollbar-thumb: #374151;
+	--scrollbar-track: initial;
+    --scrollbar-thumb: initial;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    overflow: overlay;
+    scrollbar-width: thin;
 }
