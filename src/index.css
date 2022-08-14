@@ -37,8 +37,12 @@ a {
 	border-bottom: 1px solid rgb(214, 207, 207);
 }
 
-.table-height-normal {
+.main-height-normal {
 	height: calc(100vh - 2rem - 3rem - 4rem - 8rem);
+}
+
+.table-height-normal {
+	height: calc(100vh - 2rem - 3rem - 4rem - 8.8rem);
 }
 .table-body-height-normal {
 	height: calc(100vh - 2rem - 3rem - 4rem - 16rem);

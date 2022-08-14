@@ -4,6 +4,8 @@ import { Fragment } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import SuspenseLoading from '../transition/SuspenseLoading'
 
+const scrollbar = `scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full`
+
 const arrayFind = (target: string, source: Array<string>) => {
 	let temp = ''
 
@@ -51,7 +53,9 @@ const Main = () => {
 				</Breadcrumbs>
 			</section>
 
-			<section className="flex-grow overflow-hidden reletive flex">
+			<section
+				className={`flex-grow overflow-auto reletive flex main-height-normal ${scrollbar}`}
+			>
 				<SuspenseLoading element={<Outlet />} />
 			</section>
 		</Fragment>

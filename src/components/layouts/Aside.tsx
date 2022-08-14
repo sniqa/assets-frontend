@@ -8,6 +8,7 @@ import { IconButton, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 import { Link, useMatch } from 'react-router-dom'
 import { RouterPath } from '../../router/path'
+import { SignalWifi2BarIcon } from '../icons'
 interface LeftSidebarItemProps {
 	icon?: JSX.Element
 	title: string
@@ -38,7 +39,7 @@ const navs: Array<LeftSidebarItemProps> = [
 	{ icon: <HomeIcon />, title: '主页', to: RouterPath.HOME },
 	{ icon: <PersonIcon />, title: '用户', to: RouterPath.USER },
 	// { icon: <ArticleIcon />, title: '文档', to: RouterPath.DOCUMENT },
-	// { icon: <SignalWifi2BarIcon />, title: '网络', to: RouterPath.NETWORK },
+	{ icon: <SignalWifi2BarIcon />, title: '网络', to: RouterPath.NETWORK },
 	{ icon: <DesktopWindowsIcon />, title: '设备', to: RouterPath.DEVICES },
 	// {
 	// 	icon: (

@@ -1,16 +1,11 @@
 import MaterialCheckbox from '@mui/material/Checkbox'
-import type { Select } from '@table-library/react-table-library/select'
 import { HeaderCell, HeaderRow } from '@table-library/react-table-library/table'
+import { TableHeaderProps } from './types'
 
 const resize = { resizerHighlight: '#dde2eb' }
 
-interface TableHeaderProps {
-	select: Select
-	columns: any[]
-}
-
 const TableHeader = (props: TableHeaderProps) => {
-	const { select, columns } = props
+	const { select, columns, filter = {}, operate } = props
 
 	return (
 		<HeaderRow>
@@ -24,12 +19,16 @@ const TableHeader = (props: TableHeaderProps) => {
 				/>
 			</HeaderCell>
 			{columns.map((column) => (
-				<HeaderCell resize={resize} key={column.label}>
+				<HeaderCell
+					resize={resize}
+					key={column.label}
+					hide={!Reflect.get(filter, column.label) || false}
+				>
 					{column.label}
 				</HeaderCell>
 			))}
 
-			<HeaderCell>{`操作`}</HeaderCell>
+			{operate && <HeaderCell>{operate.header}</HeaderCell>}
 		</HeaderRow>
 	)
 }

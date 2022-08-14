@@ -1,6 +1,7 @@
 import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from '@mui/material'
-import { useState } from 'react'
-// import { emitter } from '../../apis/mitt'
+import { emitter } from '../../apis/mitt'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { notice, removeNotice } from '../../store/notice'
 
 export interface NoticebarStatus {
 	status: AlertColor
@@ -12,28 +13,27 @@ export interface NoticebarStatus {
 }
 
 const Noticebar = () => {
-	// emitter.on('notice', (state) => {
-	// 	setSnackbarStatus(state)
-	// })
+	const { status, message } = useAppSelector((state) => state.notice)
 
-	const [snackbarStatus, setSnackbarStatus] = useState<NoticebarStatus>({
-		status: 'success',
-		message: '',
+	const dispatch = useAppDispatch()
+
+	emitter.on('notice', (state) => {
+		dispatch(notice(state))
 	})
 
 	return (
 		<Snackbar
-			open={snackbarStatus.message != ''}
+			open={message != ''}
 			autoHideDuration={3000}
-			onClose={() => setSnackbarStatus({ ...snackbarStatus, message: '' })}
-			message={snackbarStatus.message}
+			onClose={() => dispatch(removeNotice())}
+			message={message}
 			anchorOrigin={{
 				vertical: 'top',
 				horizontal: 'center',
 			}}
 		>
-			<Alert severity={snackbarStatus.status} sx={{ width: '100%' }}>
-				{snackbarStatus.message}
+			<Alert severity={status} sx={{ width: '100%' }}>
+				{message}
 			</Alert>
 		</Snackbar>
 	)

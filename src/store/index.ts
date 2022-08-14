@@ -1,19 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
-// import usersReducer from './user'
-// import devicesReducer from './devices'
-// import netTypeReducer from './netTypes'
-// import documentReducer from './document'
-import tableBodySizeReducer from './tableBodySize'
+import networkTypeReducer from './networkType'
+import noticeReducer from './notice'
+import userReducer from './users'
 
 const store = configureStore({
 	reducer: {
-		tableBodySize: tableBodySizeReducer,
-		// document: documentReducer,
-		// users: usersReducer,
-		// devices: devicesReducer,
-		// netTypes: netTypeReducer,
+		notice: noticeReducer,
+		users: userReducer,
+		networkTypes: networkTypeReducer,
 	},
 })
 

@@ -13,6 +13,10 @@ import SuspenseLoading from './components/transition/SuspenseLoading'
 import Home from './views/Home'
 
 const User = lazy(() => import('./views/User'))
+
+const Network = lazy(() => import('./views/network/Network'))
+const NetworkType = lazy(() => import('./views/network/NetworkType'))
+
 const Devices = lazy(() => import('./views/devices/Devices'))
 const Computers = lazy(() => import('./views/devices/Computers'))
 const NetDevices = lazy(() => import('./views/devices/NetDevices'))
@@ -69,6 +73,18 @@ const App = () => {
 								<Route
 									path={RouterPath.OTHER_DEVICES}
 									element={<OtherDevices />}
+								></Route>
+							</Route>
+
+							{/* 网络 */}
+							<Route
+								path={RouterPath.NETWORK}
+								element={<SuspenseLoading element={<Outlet />} />}
+							>
+								<Route index element={<Network />}></Route>
+								<Route
+									path={RouterPath.NETWORK_TYPE}
+									element={<NetworkType />}
 								></Route>
 							</Route>
 						</Route>

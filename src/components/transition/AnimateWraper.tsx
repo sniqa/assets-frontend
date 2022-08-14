@@ -9,9 +9,9 @@ const AnimateWraper = ({ children, className }: AnimateWraperProps) => {
 	return (
 		<AnimatePresence>
 			<motion.div
-				initial={{ x: '10%' }}
+				initial={{ x: '2%' }}
 				animate={{ x: 0 }}
-				exit={{ x: '-100%' }}
+				exit={{ x: '-10%' }}
 				className={className}
 			>
 				{children}
