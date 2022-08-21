@@ -26,10 +26,7 @@ const TableBody = (props: TableBodyProps) => {
 				const value = getValue(row[column.field])
 
 				return (
-					<Cell
-						key={column.label}
-						hide={!Reflect.get(filter, column.label) || false}
-					>
+					<Cell key={column.label} hide={!column.isSelect}>
 						<Tooltip title={value} placement="bottom">
 							<span>{value}</span>
 						</Tooltip>

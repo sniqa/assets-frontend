@@ -1,21 +1,19 @@
+// 消息主界面
+
 import NavigateItem from '../../components/NavigateItem'
 import AnimateWraper from '../../components/transition/AnimateWraper'
 import { RouterPath } from '../../router/path'
 
-const Network = () => {
+const UserIndex = () => {
 	return (
 		<AnimateWraper className="w-full">
-			<NavigateItem
-				title={'网络类型'}
-				detail={'ip, mac的详细资料'}
-				to={RouterPath.NETWORK_TYPE}
-			/>
+			<NavigateItem title={'日志'} detail={'日志'} to={RouterPath.LOGS} />
 			{/* <NavigateItem
-				title={'网络设备'}
-				detail={'交换机,路由器,光电转换器的清单资料'}
-				to={RouterPath.NETWORK_DEVICES}
-			/>
-			<NavigateItem
+				title={'用户'}
+				detail={'用户资料'}
+				to={RouterPath.USER_INFO}
+			/> */}
+			{/*	<NavigateItem
 				title={'外设'}
 				detail={'打印机,扫描仪,复印机的资料'}
 				to={RouterPath.PERIPHERALS}
@@ -29,4 +27,4 @@ const Network = () => {
 	)
 }
 
-export default Network
+export default UserIndex

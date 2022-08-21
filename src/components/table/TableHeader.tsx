@@ -19,11 +19,7 @@ const TableHeader = (props: TableHeaderProps) => {
 				/>
 			</HeaderCell>
 			{columns.map((column) => (
-				<HeaderCell
-					resize={resize}
-					key={column.label}
-					hide={!Reflect.get(filter, column.label) || false}
-				>
+				<HeaderCell resize={resize} key={column.label} hide={!column.isSelect}>
 					{column.label}
 				</HeaderCell>
 			))}

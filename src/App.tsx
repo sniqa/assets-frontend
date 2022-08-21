@@ -12,16 +12,21 @@ import { Aside, Header, Layout, Main, Noticebar } from './components/layouts'
 import SuspenseLoading from './components/transition/SuspenseLoading'
 import Home from './views/Home'
 
-const User = lazy(() => import('./views/User'))
+const User = lazy(() => import('./views/user/UserIndex'))
+const UserInfo = lazy(() => import('./views/user/UserInfo'))
+const Department = lazy(() => import('./views/user/Department'))
 
-const Network = lazy(() => import('./views/network/Network'))
+const Network = lazy(() => import('./views/network/NetworkIndex'))
 const NetworkType = lazy(() => import('./views/network/NetworkType'))
 
-const Devices = lazy(() => import('./views/devices/Devices'))
+const Devices = lazy(() => import('./views/devices/DevicesIndex'))
 const Computers = lazy(() => import('./views/devices/Computers'))
 const NetDevices = lazy(() => import('./views/devices/NetDevices'))
 const Peripherals = lazy(() => import('./views/devices/Peripherals'))
 const OtherDevices = lazy(() => import('./views/devices/Other'))
+
+const MessageIndex = lazy(() => import('./views/message/MessageIndex'))
+const Logs = lazy(() => import('./views/message/Logs'))
 
 const App = () => {
 	return (
@@ -45,13 +50,17 @@ const App = () => {
 								index
 								element={<Navigate to={RouterPath.HOME} replace />}
 							/>
-
 							{/* 主页 */}
 							<Route path={RouterPath.HOME} element={<Home />} />
-
 							{/* 用户 */}
-							<Route path={RouterPath.USER} element={<User />} />
-
+							<Route
+								path={RouterPath.USER}
+								element={<SuspenseLoading element={<Outlet />} />}
+							>
+								<Route index element={<User />} />
+								<Route path={RouterPath.USER_INFO} element={<UserInfo />} />
+								<Route path={RouterPath.DEPARTMENT} element={<Department />} />
+							</Route>
 							{/* 设备 */}
 							<Route
 								path={RouterPath.DEVICES}
@@ -75,7 +84,6 @@ const App = () => {
 									element={<OtherDevices />}
 								></Route>
 							</Route>
-
 							{/* 网络 */}
 							<Route
 								path={RouterPath.NETWORK}
@@ -87,6 +95,15 @@ const App = () => {
 									element={<NetworkType />}
 								></Route>
 							</Route>
+							{/* 消息 */}
+							<Route
+								path={RouterPath.MESSAGE}
+								element={<SuspenseLoading element={<Outlet />} />}
+							>
+								<Route index element={<MessageIndex />} />
+								<Route path={RouterPath.LOGS} element={<Logs />} />
+							</Route>
+							{/* end of 消息*/}
 						</Route>
 					</Routes>
 				}

@@ -4,11 +4,11 @@ import PersonIcon from '@mui/icons-material/Person'
 import SettingsIcon from '@mui/icons-material/Settings'
 import ZoomInMapIcon from '@mui/icons-material/ZoomInMap'
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap'
-import { IconButton, Tooltip, Typography } from '@mui/material'
+import { Badge, IconButton, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 import { Link, useMatch } from 'react-router-dom'
 import { RouterPath } from '../../router/path'
-import { SignalWifi2BarIcon } from '../icons'
+import { NotificationsIcon, SignalWifi2BarIcon } from '../icons'
 interface LeftSidebarItemProps {
 	icon?: JSX.Element
 	title: string
@@ -41,15 +41,15 @@ const navs: Array<LeftSidebarItemProps> = [
 	// { icon: <ArticleIcon />, title: '文档', to: RouterPath.DOCUMENT },
 	{ icon: <SignalWifi2BarIcon />, title: '网络', to: RouterPath.NETWORK },
 	{ icon: <DesktopWindowsIcon />, title: '设备', to: RouterPath.DEVICES },
-	// {
-	// 	icon: (
-	// 		<Badge badgeContent={0} color={`primary`}>
-	// 			<NotificationsIcon />
-	// 		</Badge>
-	// 	),
-	// 	title: '消息',
-	// 	to: RouterPath.MESSAGE,
-	// },
+	{
+		icon: (
+			<Badge badgeContent={0} color={`primary`}>
+				<NotificationsIcon />
+			</Badge>
+		),
+		title: '消息',
+		to: RouterPath.MESSAGE,
+	},
 	// { icon: <InfoIcon />, title: '关于', to: RouterPath.ABOUT },
 ]
 

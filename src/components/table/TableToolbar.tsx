@@ -122,13 +122,20 @@ const TableToolbar = (props: TableToolbarProps) => {
 						{columns.map((column) => (
 							<SwitchLabels
 								label={column.label}
+								checked={Boolean(column.isSelect)}
 								key={column.field}
-								onChange={() => {
+								onChange={(checked) => {
 									onFilter &&
-										onFilter((oldColumns) => ({
-											...oldColumns,
-											[column.label]: !Reflect.get(oldColumns, column.label),
-										}))
+										onFilter((oldColumns) =>
+											oldColumns.map((col) =>
+												col.field === column.field
+													? {
+															...col,
+															isSelect: checked,
+													  }
+													: col
+											)
+										)
 								}}
 							/>
 						))}
@@ -176,15 +183,23 @@ export default TableToolbar
 // 开关和描述文字
 export const SwitchLabels = ({
 	label,
+	checked = true,
 	onChange,
 }: {
 	label: string
-	onChange?: () => void
+	checked: boolean
+	onChange?: (state: boolean) => void
 }) => {
 	return (
 		<FormGroup>
 			<FormControlLabel
-				control={<Switch defaultChecked size="small" onChange={onChange} />}
+				control={
+					<Switch
+						checked={checked}
+						size="small"
+						onChange={(e) => onChange && onChange(e.target.checked)}
+					/>
+				}
 				label={label}
 			/>
 		</FormGroup>

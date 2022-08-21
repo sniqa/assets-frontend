@@ -29,6 +29,10 @@ const CustomTable = (props: CustomTableProps) => {
 		[rows]
 	)
 
+	const [columnsWithSelect, setColumnsWithSelect] = useState(() =>
+		columns.map((column) => ({ isSelect: true, ...column }))
+	)
+
 	//
 	const [filterData, setFilterData] = useState(rowsWithId)
 
@@ -108,14 +112,14 @@ const CustomTable = (props: CustomTableProps) => {
 		<Paper className="p-2 min-w-38rem w-full" elevation={0}>
 			<section className="h-3rem">
 				<TableToolbar
-					columns={columns}
+					columns={columnsWithSelect}
 					extensions={extensions}
-					onFilter={setHiddenColumns}
+					onFilter={setColumnsWithSelect}
 					isSelectionEmpty={selectedRowsId.length <= 0}
 					onSearch={(condition) => search(condition)}
 					onDownloadCSV={() =>
 						downloadTable({
-							tableHeader: columns,
+							tableHeader: columnsWithSelect,
 							selectionData: filterData.filter((row) =>
 								selectedRowsId.includes(row.id)
 							),
@@ -146,7 +150,7 @@ const CustomTable = (props: CustomTableProps) => {
 							header={() => (
 								<TableHeader
 									select={select}
-									columns={columns}
+									columns={columnsWithSelect}
 									filter={hiddenColumns}
 									operate={operate}
 								/>
@@ -154,7 +158,7 @@ const CustomTable = (props: CustomTableProps) => {
 							body={(node, index) => (
 								<TableBody
 									select={select}
-									columns={columns}
+									columns={columnsWithSelect}
 									row={node}
 									filter={hiddenColumns}
 									oprate={operate}

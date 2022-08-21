@@ -3,6 +3,7 @@ import { Select } from '@table-library/react-table-library/select'
 export interface TableColumn {
 	label: string
 	field: string
+	isSelect?: boolean
 }
 
 export interface SearchCondition {
@@ -41,13 +42,21 @@ export interface TableToolbarProps {
 	extensions?: TableToolbarExtensions
 	onDeleteSelection?: () => void
 	onDownloadCSV?: () => void
-	onFilter?: React.Dispatch<React.SetStateAction<{}>>
+	onFilter?: React.Dispatch<
+		React.SetStateAction<
+			{
+				label: string
+				field: string
+				isSelect: boolean
+			}[]
+		>
+	>
 	onSearch?: (condition: SearchCondition) => void
 }
 
 export interface TableHeaderProps {
 	select: Select
-	columns: any[]
+	columns: TableColumn[]
 	filter?: {}
 	operate?: Operate
 }
@@ -55,7 +64,7 @@ export interface TableHeaderProps {
 export interface TableBodyProps {
 	select: Select
 	row: any
-	columns: any[]
+	columns: TableColumn[]
 	filter?: {}
 	oprate?: Operate
 }
