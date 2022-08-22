@@ -18,6 +18,7 @@ const Department = lazy(() => import('./views/user/Department'))
 
 const Network = lazy(() => import('./views/network/NetworkIndex'))
 const NetworkType = lazy(() => import('./views/network/NetworkType'))
+const IpAddress = lazy(() => import('./views/network/IpAddress'))
 
 const Devices = lazy(() => import('./views/devices/DevicesIndex'))
 const Computers = lazy(() => import('./views/devices/Computers'))
@@ -27,6 +28,8 @@ const OtherDevices = lazy(() => import('./views/devices/Other'))
 
 const MessageIndex = lazy(() => import('./views/message/MessageIndex'))
 const Logs = lazy(() => import('./views/message/Logs'))
+
+const SettingsIndex = lazy(() => import('./views/settings/SettingsIndex'))
 
 const App = () => {
 	return (
@@ -94,6 +97,10 @@ const App = () => {
 									path={RouterPath.NETWORK_TYPE}
 									element={<NetworkType />}
 								></Route>
+								<Route
+									path={RouterPath.IP_ADDRESS}
+									element={<IpAddress />}
+								></Route>
 							</Route>
 							{/* 消息 */}
 							<Route
@@ -104,6 +111,10 @@ const App = () => {
 								<Route path={RouterPath.LOGS} element={<Logs />} />
 							</Route>
 							{/* end of 消息*/}
+
+							<Route path={RouterPath.SETTINGS} element={<SuspenseLoading element={<Outlet />} />}>
+								<Route index element={<SettingsIndex />} />
+							</Route>
 						</Route>
 					</Routes>
 				}

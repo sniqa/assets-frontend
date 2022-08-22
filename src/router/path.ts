@@ -13,6 +13,7 @@ export enum RouterPath {
 
 	NETWORK = 'network',
 	NETWORK_TYPE = 'network_type',
+	IP_ADDRESS = 'ip_address',
 
 	DEVICES = 'devices',
 	COMPUTER = 'computer',

@@ -5,7 +5,7 @@ import Table, {
 } from '../../components/table'
 import AnimateWraper from '../../components/transition/AnimateWraper'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { _fetch } from '../../apis/fetch'
 import { notice } from '../../apis/mitt'
 import AddDialog, { AddDialogContent } from '../../components/dialogs/AddDialog'
@@ -123,6 +123,8 @@ const NetworkType = () => {
 
 		return notice({ status: 'error', message: '创建网络类型失败' })
 	}
+
+
 
 	return (
 		<AnimateWraper className="w-full">

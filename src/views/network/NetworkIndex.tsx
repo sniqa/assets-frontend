@@ -10,12 +10,12 @@ const NetworkIndex = () => {
 				detail={'ip, mac的详细资料'}
 				to={RouterPath.NETWORK_TYPE}
 			/>
-			{/* <NavigateItem
-				title={'网络设备'}
+			 <NavigateItem
+				title={'ip地址'}
 				detail={'交换机,路由器,光电转换器的清单资料'}
-				to={RouterPath.NETWORK_DEVICES}
+				to={RouterPath.IP_ADDRESS}
 			/>
-			<NavigateItem
+			{/*<NavigateItem
 				title={'外设'}
 				detail={'打印机,扫描仪,复印机的资料'}
 				to={RouterPath.PERIPHERALS}
