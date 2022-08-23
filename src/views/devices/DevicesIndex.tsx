@@ -6,6 +6,11 @@ const Devices = () => {
 	return (
 		<AnimateWraper className="w-full">
 			<NavigateItem
+				title={'设备汇总'}
+				detail={'饼状图设备汇总'}
+				to={RouterPath.DEVICES_SUMMARY}
+			/>
+			<NavigateItem
 				title={'终端'}
 				detail={'台式,一体机,笔记本的详细资料'}
 				to={RouterPath.COMPUTER}
@@ -24,6 +29,11 @@ const Devices = () => {
 				title={'其他'}
 				detail={'包括一些碎纸机等其他设备的资料'}
 				to={RouterPath.OTHER_DEVICES}
+			/>
+			<NavigateItem
+				title={'设备基础资料'}
+				detail={'设备的一些公共基础资料库'}
+				to={RouterPath.DEVICE_BASE}
 			/>
 		</AnimateWraper>
 	)

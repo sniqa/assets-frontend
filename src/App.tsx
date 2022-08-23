@@ -22,9 +22,11 @@ const IpAddress = lazy(() => import('./views/network/IpAddress'))
 
 const Devices = lazy(() => import('./views/devices/DevicesIndex'))
 const Computers = lazy(() => import('./views/devices/Computers'))
+const DevicesSummary = lazy(() => import('./views/devices/DevicesSummary'))
 const NetDevices = lazy(() => import('./views/devices/NetDevices'))
 const Peripherals = lazy(() => import('./views/devices/Peripherals'))
 const OtherDevices = lazy(() => import('./views/devices/Other'))
+const DevicesBase = lazy(() => import('./views/devices/DevicesBase'))
 
 const MessageIndex = lazy(() => import('./views/message/MessageIndex'))
 const Logs = lazy(() => import('./views/message/Logs'))
@@ -71,6 +73,10 @@ const App = () => {
 							>
 								<Route index element={<Devices />}></Route>
 								<Route
+									path={RouterPath.DEVICES_SUMMARY}
+									element={<DevicesSummary />}
+								></Route>
+								<Route
 									path={RouterPath.COMPUTER}
 									element={<Computers />}
 								></Route>
@@ -85,6 +91,10 @@ const App = () => {
 								<Route
 									path={RouterPath.OTHER_DEVICES}
 									element={<OtherDevices />}
+								></Route>
+								<Route
+									path={RouterPath.DEVICE_BASE}
+									element={<DevicesBase />}
 								></Route>
 							</Route>
 							{/* 网络 */}
@@ -112,7 +122,10 @@ const App = () => {
 							</Route>
 							{/* end of 消息*/}
 
-							<Route path={RouterPath.SETTINGS} element={<SuspenseLoading element={<Outlet />} />}>
+							<Route
+								path={RouterPath.SETTINGS}
+								element={<SuspenseLoading element={<Outlet />} />}
+							>
 								<Route index element={<SettingsIndex />} />
 							</Route>
 						</Route>

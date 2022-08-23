@@ -16,8 +16,10 @@ export enum RouterPath {
 	IP_ADDRESS = 'ip_address',
 
 	DEVICES = 'devices',
-	COMPUTER = 'computer',
-	NETWORK_DEVICES = 'netdevices',
+	DEVICES_SUMMARY = 'devices_summary',
+	COMPUTER = 'computers',
+	NETWORK_DEVICES = 'net_devices',
 	PERIPHERALS = 'peripherals',
 	OTHER_DEVICES = 'other',
+	DEVICE_BASE = 'devices_base',
 }
