@@ -9,9 +9,6 @@ const getNetworkTypes = async () => {
 	if (findNetworkTypes) {
 		const { success, data } = findNetworkTypes
 
-		console.log(data);
-		
-
 		return success ? data : []
 	}
 	return []
