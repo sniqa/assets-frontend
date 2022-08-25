@@ -4,11 +4,14 @@ import { AddIcon } from "../../components/icons"
 import Table, {
 	TableColumn,
 	TableDialog,
+	TableRow,
 	TableToolbarExtensions,
 } from "../../components/table"
 import AnimateWraper from "../../components/transition/AnimateWraper"
+import EditDialog from "../../components/dialogs/EditDialog"
 import AddDialog from "../../components/dialogs/AddDialog"
 import { _fetch } from "../../apis/fetch"
+import { notice } from "../../apis/mitt"
 
 const columns: TableColumn[] = [
 	{ label: "设备型号", field: "device_model" },
@@ -20,8 +23,13 @@ const columns: TableColumn[] = [
 const DevicesBase = () => {
 	const [openDialog, setOpenDialog] = useState(false)
 
-	const [deviceBaseRows, setDeviceBaseRows] = useState([])
+	const [openEditDialog, setOpenEditDialog] = useState(false)
 
+	const [deviceBaseRows, setDeviceBaseRows] = useState<TableRow[]>([])
+
+	const [selectRow, setSelectRow] = useState({})
+
+	// 创建
 	const createDeviceBase = async (deviceInfo: any) => {
 		const { CREATE_DEVICE_BASE } = await _fetch({
 			CREATE_DEVICE_BASE: deviceInfo,
@@ -32,6 +40,24 @@ const DevicesBase = () => {
 			success &&
 				setDeviceBaseRows((old) => [{ ...data, ...deviceInfo }, ...old])
 		}
+	}
+
+	// 更新
+	const updateDeviceBase = async (val: any) => {
+		const { MODIFY_DEVICE_BASE } = await _fetch({ MODIFY_DEVICE_BASE: val })
+
+		if (MODIFY_DEVICE_BASE) {
+			const { success, data, errmsg } = MODIFY_DEVICE_BASE
+			console.log(MODIFY_DEVICE_BASE)
+
+			console.log(data)
+			return
+		}
+
+		return notice({
+			status: "error",
+			message: "更新失败",
+		})
 	}
 
 	const extensions: TableToolbarExtensions = [
@@ -46,7 +72,9 @@ const DevicesBase = () => {
 		() => ({
 			header: "操作",
 			cell: (row: any) => (
-				<Button onClick={() => console.log(row)}>编辑</Button>
+				<Button onClick={() => (setSelectRow(row), setOpenEditDialog(true))}>
+					{`编辑`}
+				</Button>
 			),
 		}),
 		[]
@@ -75,13 +103,30 @@ const DevicesBase = () => {
 				operate={operate}
 			/>
 
-			<AddDialog
-				open={openDialog}
-				onClose={() => setOpenDialog(false)}
-				title="新增基础资料"
-				content={columns}
-				onAdd={(val) => createDeviceBase(val)}
-			/>
+			{openDialog ? (
+				<AddDialog
+					open={openDialog}
+					onClose={() => setOpenDialog(false)}
+					title="新增基础资料"
+					content={columns}
+					onAdd={(val) => createDeviceBase(val)}
+				/>
+			) : (
+				<></>
+			)}
+
+			{openEditDialog ? (
+				<EditDialog
+					open={openEditDialog}
+					onClose={() => setOpenEditDialog(false)}
+					title={`更改基础资料`}
+					content={columns}
+					onEdit={(val) => updateDeviceBase(val)}
+					originData={selectRow}
+				/>
+			) : (
+				<></>
+			)}
 		</AnimateWraper>
 	)
 }

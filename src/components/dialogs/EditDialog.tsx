@@ -5,8 +5,8 @@ import {
 	DialogContent,
 	DialogTitle,
 	TextField,
-} from '@mui/material'
-import { useEffect, useState } from 'react'
+} from "@mui/material"
+import { useEffect, useState } from "react"
 
 export interface AddDialogContent {
 	label: string
@@ -19,7 +19,7 @@ interface AddDialogProps {
 	onClose: () => void
 	title: string
 	content: AddDialogContent[]
-	onAdd?: (value: any) => void
+	onEdit?: (value: any) => void
 	originData?: Record<string, any>
 }
 
@@ -27,9 +27,9 @@ const EditDialog = (props: AddDialogProps) => {
 	const {
 		open,
 		onClose,
-		title = '',
+		title = "",
 		content,
-		onAdd = () => {},
+		onEdit = () => {},
 		originData = {},
 	} = props
 
@@ -48,11 +48,11 @@ const EditDialog = (props: AddDialogProps) => {
 					{content &&
 						content.map((item) => (
 							<TextField
-								label={item.required ? item.label + ' *' : item.label}
+								label={item.required ? item.label + " *" : item.label}
 								size="small"
 								defaultValue={originData[item.field]}
 								key={item.field}
-								sx={{ my: '8px' }}
+								sx={{ my: "8px" }}
 								onChange={(e) =>
 									setValue({ ...value, [item.field]: e.target.value })
 								}
@@ -65,7 +65,7 @@ const EditDialog = (props: AddDialogProps) => {
 				<Button onClick={onClose}>{`取消`}</Button>
 				<Button
 					variant="contained"
-					onClick={() => onAdd(value)}
+					onClick={() => onEdit(value)}
 				>{`确定`}</Button>
 			</DialogActions>
 		</Dialog>

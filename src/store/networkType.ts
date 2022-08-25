@@ -1,13 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { _fetch } from '../apis/fetch'
-import { NetworkTypeInfo } from '../types'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { _fetch } from "../apis/fetch"
+import { NetworkTypeInfo } from "../types"
 
 // 获取网络类型
 const getNetworkTypes = async () => {
-	const { findNetworkTypes } = await _fetch({ findNetworkTypes: {} })
+	const { FIND_NETWORK_TYPE } = await _fetch({ FIND_NETWORK_TYPE: {} })
 
-	if (findNetworkTypes) {
-		const { success, data } = findNetworkTypes
+	if (FIND_NETWORK_TYPE) {
+		const { success, data } = FIND_NETWORK_TYPE
 
 		return success ? data : []
 	}
@@ -15,7 +15,7 @@ const getNetworkTypes = async () => {
 }
 
 export const networkTypeSlice = createSlice({
-	name: 'networkType',
+	name: "networkType",
 	initialState: await getNetworkTypes().then((res) => res as NetworkTypeInfo[]),
 	reducers: {
 		addNetworkType: (state, action: PayloadAction<NetworkTypeInfo>) => {

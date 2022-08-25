@@ -1,4 +1,4 @@
-import { Select } from '@table-library/react-table-library/select'
+import { Select } from "@table-library/react-table-library/select"
 
 export interface TableColumn {
 	label: string
@@ -23,7 +23,7 @@ export interface Operate {
 	cell: (value: any) => JSX.Element
 }
 
-interface TableRow {
+export interface TableRow {
 	_id: string
 	[x: string]: any
 }

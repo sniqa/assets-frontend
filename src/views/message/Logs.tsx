@@ -1,20 +1,21 @@
-import { IconButton, TextField, Tooltip } from '@mui/material'
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { useEffect, useState } from 'react'
-import { _fetch } from '../../apis/fetch'
-import { SearchIcon } from '../../components/icons'
+import { IconButton, TextField, Tooltip } from "@mui/material"
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
+import { useEffect, useState } from "react"
+import { _fetch } from "../../apis/fetch"
+import { SearchIcon } from "../../components/icons"
 
 const Logs = () => {
 	const [logs, setLogs] = useState<any[]>([])
 
 	useEffect(() => {
 		const getLogs = () =>
-			_fetch({ findLogs: {} }).then((res) => {
-				const { findLogs } = res
-				if (findLogs) {
-					const { success, data } = findLogs
-					console.log(findLogs)
+			_fetch({ FIND_LOGS: {} }).then((res) => {
+				const { FIND_LOGS } = res
+				if (FIND_LOGS) {
+					const { success, data } = FIND_LOGS
+					console.log(FIND_LOGS)
+					console.log(data)
 
 					success && setLogs(data)
 				}
@@ -53,7 +54,7 @@ const Logs = () => {
 
 			<section className="flex flex-col">
 				{logs.map((log, index) => (
-					<Log key={index} message={log.event} />
+					<Log key={index} message={log} />
 				))}
 			</section>
 		</div>
@@ -62,6 +63,15 @@ const Logs = () => {
 
 export default Logs
 
-const Log = ({ message }: { message: string }) => {
-	return <div className="flex">{message}</div>
+const Log = (props: any) => {
+	const { current_time, event, type, who, message } = props.message
+	return (
+		<div className="flex">
+			<span>{current_time}</span>
+			<span>{event}</span>
+			<span>{type}</span>
+			<span>{who}</span>
+			<span>{message}</span>
+		</div>
+	)
 }
