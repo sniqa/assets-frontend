@@ -1,12 +1,22 @@
-import { Tooltip } from '@mui/material'
-import MaterialCheckbox from '@mui/material/Checkbox'
-import { Cell, Row } from '@table-library/react-table-library/table'
-import { TableBodyProps } from './types'
+import { Tooltip } from "@mui/material"
+import MaterialCheckbox from "@mui/material/Checkbox"
+import { Cell, Row } from "@table-library/react-table-library/table"
+import { TableBodyProps } from "./types"
 
 const getValue = (val: any) => {
-	if (val === 0) return '0'
+	if (val === 0) return "0"
 
-	return val || ''
+	return val || ""
+}
+
+interface IdData {
+	id: string
+	[x: string]: any
+}
+
+const removeId = (data: IdData) => {
+	const { id, ...res } = data
+	return res
 }
 
 const TableBody = (props: TableBodyProps) => {
@@ -16,7 +26,7 @@ const TableBody = (props: TableBodyProps) => {
 		<Row item={row}>
 			<Cell stiff>
 				<MaterialCheckbox
-					inputProps={{ 'aria-label': 'select item' }}
+					inputProps={{ "aria-label": "select item" }}
 					size="small"
 					checked={select.state.ids.includes(row.id)}
 					onChange={() => select.fns.onToggleById(row.id)}
@@ -34,7 +44,7 @@ const TableBody = (props: TableBodyProps) => {
 				)
 			})}
 
-			{oprate && <Cell>{oprate.cell(row)}</Cell>}
+			{oprate && <Cell>{oprate.cell(removeId(row))}</Cell>}
 		</Row>
 	)
 }
