@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Switch from '@mui/material/Switch'
 import React, { useState } from 'react'
+import DateTimePicker from './DateTimePicker'
 import { SearchCondition, TableColumn, TableToolbarProps } from './types'
 
 const SEARCH_ICON_TOOLTIP = '查找字段'
@@ -31,6 +32,8 @@ const TableToolbar = (props: TableToolbarProps) => {
 		onDownloadCSV,
 		onFilter,
 		onSearch = () => {},
+		displayDateTimePicker,
+		dateTimePickerOnChange,
 	} = props
 
 	const [searchCondition, setSearchCondition] = useState<SearchCondition>({
@@ -155,8 +158,12 @@ const TableToolbar = (props: TableToolbarProps) => {
 					))}
 			</section>
 
-			{/* 搜索 */}
-			<section className="flex pr-2 items-center justify-end ">
+			{/* 时间选中和搜索 */}
+			<section className="flex px-2 items-center justify-end ">
+				{displayDateTimePicker && (
+					<DateTimePicker onChange={dateTimePickerOnChange} />
+				)}
+
 				<CustomSelect
 					selectList={columns}
 					onChange={(val) => {
@@ -225,12 +232,11 @@ export const CustomSelect = ({ selectList, onChange }: CustomSelectProps) => {
 
 	return (
 		<Select
-			labelId="demo-simple-select-label"
-			id="demo-simple-select"
+			displayEmpty
 			value={field}
-			placeholder={`选择字段`}
-			size="small"
+			// size="small"
 			onChange={handleChange}
+			input={<OutlinedInput />}
 			className={`w-6rem h-2rem`}
 		>
 			<MenuItem value={``} className={`h-2rem`}>{``}</MenuItem>
@@ -242,4 +248,15 @@ export const CustomSelect = ({ selectList, onChange }: CustomSelectProps) => {
 			))}
 		</Select>
 	)
+}
+
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
+const MenuProps = {
+	PaperProps: {
+		style: {
+			maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+			width: 250,
+		},
+	},
 }

@@ -21,7 +21,9 @@ const CustomTable = (props: CustomTableProps) => {
 		rows,
 		extensions,
 		operate,
+		displayDateTimePicker = false,
 		onDeleteSelection = () => {},
+		dateTimePickerOnChange,
 	} = props
 
 	const rowsWithId: TableNode[] = useMemo(
@@ -112,11 +114,13 @@ const CustomTable = (props: CustomTableProps) => {
 		<Paper className="p-2 min-w-38rem w-full" elevation={0}>
 			<section className="h-3rem">
 				<TableToolbar
+					dateTimePickerOnChange={dateTimePickerOnChange}
 					columns={columnsWithSelect}
 					extensions={extensions}
 					onFilter={setColumnsWithSelect}
 					isSelectionEmpty={selectedRowsId.length <= 0}
 					onSearch={(condition) => search(condition)}
+					displayDateTimePicker={displayDateTimePicker}
 					onDownloadCSV={() =>
 						downloadTable({
 							tableHeader: columnsWithSelect,

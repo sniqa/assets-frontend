@@ -1,23 +1,23 @@
-import { Button } from "@mui/material"
-import { useEffect, useMemo, useState } from "react"
-import { AddIcon } from "../../components/icons"
+import { Button } from '@mui/material'
+import { useEffect, useMemo, useState } from 'react'
+import { AddIcon } from '../../components/icons'
 import Table, {
 	TableColumn,
 	TableDialog,
 	TableRow,
 	TableToolbarExtensions,
-} from "../../components/table"
-import AnimateWraper from "../../components/transition/AnimateWraper"
-import EditDialog from "../../components/dialogs/EditDialog"
-import AddDialog from "../../components/dialogs/AddDialog"
-import { _fetch } from "../../apis/fetch"
-import { notice } from "../../apis/mitt"
+} from '../../components/table'
+import AnimateWraper from '../../components/transition/AnimateWraper'
+import EditDialog from '../../components/dialogs/EditDialog'
+import AddDialog from '../../components/dialogs/AddDialog'
+import { _fetch } from '../../apis/fetch'
+import { notice } from '../../apis/mitt'
 
 const columns: TableColumn[] = [
-	{ label: "设备型号", field: "device_model" },
-	{ label: "设备类型", field: "device_type" },
-	{ label: "出厂日期", field: "manufacture_date" },
-	{ label: "保质期", field: "shelf_life" },
+	{ label: '设备型号', field: 'device_model' },
+	{ label: '设备类型', field: 'device_type' },
+	{ label: '出厂日期', field: 'manufacture_date' },
+	{ label: '保质期', field: 'shelf_life' },
 ]
 
 const DevicesBase = () => {
@@ -36,10 +36,24 @@ const DevicesBase = () => {
 		})
 
 		if (CREATE_DEVICE_BASE) {
-			const { success, data } = CREATE_DEVICE_BASE
-			success &&
-				setDeviceBaseRows((old) => [{ ...data, ...deviceInfo }, ...old])
+			const { success, data, errmsg } = CREATE_DEVICE_BASE
+			return success
+				? (setDeviceBaseRows((old) => [{ ...data, ...deviceInfo }, ...old]),
+				  setOpenDialog(false),
+				  notice({
+						status: 'success',
+						message: '创建设备基础资料成功',
+				  }))
+				: notice({
+						status: 'error',
+						message: errmsg,
+				  })
 		}
+
+		return notice({
+			status: 'error',
+			message: '创建设备基础资料失败',
+		})
 	}
 
 	// 更新
@@ -55,22 +69,22 @@ const DevicesBase = () => {
 		}
 
 		return notice({
-			status: "error",
-			message: "更新失败",
+			status: 'error',
+			message: '更新失败',
 		})
 	}
 
 	const extensions: TableToolbarExtensions = [
 		{
 			icon: <AddIcon color="primary" />,
-			title: "新增",
+			title: '新增',
 			onClick: () => setOpenDialog(!openDialog),
 		},
 	]
 
 	const operate = useMemo(
 		() => ({
-			header: "操作",
+			header: '操作',
 			cell: (row: any) => (
 				<Button onClick={() => (setSelectRow(row), setOpenEditDialog(true))}>
 					{`编辑`}

@@ -1,4 +1,4 @@
-import { Select } from "@table-library/react-table-library/select"
+import { Select } from '@table-library/react-table-library/select'
 
 export interface TableColumn {
 	label: string
@@ -33,6 +33,8 @@ export interface CustomTableProps {
 	rows: TableRow[]
 	extensions?: TableToolbarExtensions
 	operate?: Operate
+	displayDateTimePicker?: boolean
+	dateTimePickerOnChange?: (date: TimestampRange) => void
 	onDeleteSelection?: (data: (string | number)[]) => {}
 }
 
@@ -42,6 +44,8 @@ export interface TableToolbarProps {
 	extensions?: TableToolbarExtensions
 	onDeleteSelection?: () => void
 	onDownloadCSV?: () => void
+	displayDateTimePicker?: boolean
+	dateTimePickerOnChange?: (date: TimestampRange) => void
 	onFilter?: React.Dispatch<
 		React.SetStateAction<
 			{
@@ -67,4 +71,9 @@ export interface TableBodyProps {
 	columns: TableColumn[]
 	filter?: {}
 	oprate?: Operate
+}
+
+export interface TimestampRange {
+	start_timestamp: number
+	end_timestamp: number
 }

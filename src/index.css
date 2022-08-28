@@ -66,3 +66,20 @@ a {
     overflow: overlay;
     scrollbar-width: thin;
 }
+
+input:focus {
+	
+	outline: none;
+}
+
+.full-length-text {
+	text-align: justify;
+	text-align-last: justify;
+}
+.border-left-none {
+	border-left: none;
+}
+
+.border-top {
+	border-top: 1px solid rgba(96, 165, 250, 1);
+}
