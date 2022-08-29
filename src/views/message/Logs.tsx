@@ -1,6 +1,7 @@
 import { Button, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import { _fetch } from '../../apis/fetch'
+import { notice, confirm } from '../../apis/mitt'
 
 import Table, { TableColumn, TableDialog } from '../../components/table'
 import AnimateWraper from '../../components/transition/AnimateWraper'
@@ -33,9 +34,40 @@ const Logs = () => {
 		getLogs()
 	}, [])
 
+	const [openConfirm, setOpenConfirm] = useState(false)
+
+	const [isSure, setIsSure] = useState(false)
+
 	const [openDialog, setOpenDialog] = useState(false)
 
 	const [selectRow, setSelectRow] = useState({})
+
+	const onDeleteSelection = async (info: (string | number)[]) => {
+		const res = await confirm({
+			title: '提示',
+			message: '确定删除选中的日志？',
+		})
+
+		if (!res) {
+			return
+		}
+
+		const { DELETE_LOGS } = await _fetch({ DELETE_LOGS: [info] })
+
+		if (DELETE_LOGS) {
+			const { success, data, errmsg } = DELETE_LOGS
+
+			return success
+				? (setLogs((old) => old.filter((log) => !info.includes(log._id))),
+				  notice({ status: 'success', message: '删除成功' }))
+				: notice({ status: 'error', message: errmsg })
+		}
+
+		return notice({
+			status: 'error',
+			message: '删除失败, 请重试',
+		})
+	}
 
 	const operate = useMemo(
 		() => ({
@@ -56,8 +88,21 @@ const Logs = () => {
 				rows={logs}
 				operate={operate}
 				displayDateTimePicker
+				onDeleteSelection={onDeleteSelection}
 				dateTimePickerOnChange={(val) => console.log(val)}
 			/>
+
+			{openConfirm ? (
+				<TableDialog
+					open={openConfirm}
+					onClose={() => (setOpenConfirm(false), setIsSure(false))}
+					onClick={() => (setOpenConfirm(false), setIsSure(true))}
+					title={`提示`}
+					content={<div className="w-12rem">{`确定删除选定的日志`}</div>}
+				/>
+			) : (
+				<></>
+			)}
 
 			{openDialog ? (
 				<TableDialog

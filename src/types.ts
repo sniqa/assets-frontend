@@ -9,6 +9,11 @@ export interface NoticebarStatus {
 	) => void
 }
 
+export interface ConfirmbarState {
+	title: string
+	message: string
+}
+
 interface WithId {
 	id: string
 }

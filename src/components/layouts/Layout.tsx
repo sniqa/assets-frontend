@@ -5,14 +5,16 @@ interface LayoutProps {
 	main: JSX.Element
 	aside: JSX.Element
 	notice?: JSX.Element
+	confirm?: JSX.Element
 }
 
 const Layout = (props: LayoutProps) => {
-	const { header, main, aside, notice } = props
+	const { header, main, aside, notice, confirm } = props
 
 	return (
 		<Fragment>
 			{notice}
+			{confirm}
 			<header>{header}</header>
 			<div className="flex-grow inline-flex">
 				<aside className={`inline-flex h-full`}>{aside}</aside>

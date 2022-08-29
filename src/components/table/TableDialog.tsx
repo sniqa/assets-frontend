@@ -11,7 +11,7 @@ interface TableDialogProps {
 	onClose: () => void
 	title: string
 	onClick?: () => void
-	content?: JSX.Element
+	content?: JSX.Element | string
 }
 
 const TableDialog = (props: TableDialogProps) => {

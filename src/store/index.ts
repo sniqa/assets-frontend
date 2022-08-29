@@ -4,12 +4,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import networkTypeReducer from './networkType'
 import noticeReducer from './notice'
 import userReducer from './users'
+import confirmReducer from './confirm'
 
 const store = configureStore({
 	reducer: {
 		notice: noticeReducer,
 		users: userReducer,
 		networkTypes: networkTypeReducer,
+		confirm: confirmReducer,
 	},
 })
 

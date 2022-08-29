@@ -3,4 +3,5 @@ import Header from './Header'
 import Layout from './Layout'
 import Main from './Main'
 import Noticebar from './Noticebar'
-export { Layout, Header, Aside, Noticebar, Main }
+import Confirmbar from './Confirmbar'
+export { Layout, Header, Aside, Noticebar, Main, Confirmbar }

@@ -8,7 +8,14 @@ import {
 import { RouterPath } from './router/path'
 
 import { lazy } from 'react'
-import { Aside, Header, Layout, Main, Noticebar } from './components/layouts'
+import {
+	Aside,
+	Header,
+	Layout,
+	Main,
+	Noticebar,
+	Confirmbar,
+} from './components/layouts'
 import SuspenseLoading from './components/transition/SuspenseLoading'
 import Home from './views/Home'
 
@@ -47,6 +54,7 @@ const App = () => {
 									main={<Main />}
 									aside={<Aside />}
 									notice={<Noticebar />}
+									confirm={<Confirmbar />}
 								/>
 							}
 						>
