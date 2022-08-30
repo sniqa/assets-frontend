@@ -5,7 +5,8 @@ import {
 	TextFieldProps,
 	Tooltip,
 } from '@mui/material'
-import { Dispatch, SetStateAction, useMemo, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { _fetch } from '../../apis/fetch'
 import {
 	AddCircleOutlineIcon,
 	AddIcon,
@@ -14,9 +15,14 @@ import {
 import Table, {
 	TableDialog,
 	TableToolbarExtensions,
+	Operate,
+	TableColumn,
+	TableRow,
 } from '../../components/table'
-import { Operate, TableColumn } from '../../components/table/types'
 import AnimateWraper from '../../components/transition/AnimateWraper'
+
+import { nanoid } from 'nanoid'
+import { notice } from '../../store/notice'
 
 const columns: TableColumn[] = [
 	{ label: '部门', field: 'department' },
@@ -26,12 +32,17 @@ const columns: TableColumn[] = [
 const Department = () => {
 	const [openDialog, setOpenDialog] = useState(false)
 
-	const [locations, setLocations] = useState([''])
+	const [departmentRows, setDepartmentRows] = useState<TableRow[]>([])
+
+	const [departmentInfo, setDepartmentInfo] = useState({
+		department_name: '',
+		locations: [''],
+	})
 
 	const extensions: TableToolbarExtensions = useMemo(() => {
 		return [
 			{
-				title: '新增用户',
+				title: '新增部门',
 				icon: <AddIcon color="primary" />,
 				onClick: () => setOpenDialog(!openDialog),
 			},
@@ -53,112 +64,194 @@ const Department = () => {
 		[]
 	)
 
+	// 创建
+	const createDepartment = async (info: DepartmentInfo) => {
+		const { CREATE_DEPARTMENT } = await _fetch({ CREATE_DEPARTMENT: info })
+
+		if (CREATE_DEPARTMENT) {
+			const { success, data, errmsg } = CREATE_DEPARTMENT
+
+			return success
+				? (setDepartmentRows([{ ...info, _id: data }, ...departmentRows]),
+				  notice({
+						status: 'success',
+						message: '创建成功',
+				  }))
+				: notice({
+						status: 'error',
+						message: errmsg,
+				  })
+		}
+
+		return notice({
+			status: 'error',
+			message: '创建失败',
+		})
+	}
+
+	useEffect(() => {
+		notice({
+			status: 'error',
+			message: '显示信息',
+		})
+	}, [])
+
+	// 更新
+	const updateDepartment = async () => {}
+
+	//删除
+	const deleteDepartment = async () => {}
+
+	// 初始化
+
+	useEffect(() => {
+		const getDepartment = async () => {
+			const { FIND_DEPARTMENTS } = await _fetch({ FIND_DEPARTMENTS: {} })
+
+			if (FIND_DEPARTMENTS) {
+				const { success, data } = FIND_DEPARTMENTS
+
+				return success && setDepartmentRows(data)
+			}
+
+			return []
+		}
+
+		getDepartment()
+	}, [])
+
 	return (
 		<AnimateWraper className="w-full">
 			<Table
 				columns={columns}
-				rows={[]}
+				rows={departmentRows}
 				extensions={extensions}
 				operate={operate}
 			/>
 
-			<TableDialog
-				open={openDialog}
-				onClose={() => setOpenDialog(!openDialog)}
-				title={'新建部门'}
-				content={
-					<DialogContent
-						label={'办公室'}
-						values={locations}
-						setValues={setLocations}
-					/>
-				}
-				onClick={() => console.log(locations)}
-			/>
+			{openDialog ? (
+				<TableDialog
+					open={openDialog}
+					onClose={() => setOpenDialog(!openDialog)}
+					title={'新建部门'}
+					content={<DialogContent onChange={(val) => setDepartmentInfo(val)} />}
+					onClick={() => createDepartment(departmentInfo)}
+				/>
+			) : (
+				<></>
+			)}
 		</AnimateWraper>
 	)
 }
 
 export default Department
 
+interface DepartmentInfo {
+	department_name: string
+	locations: string[]
+}
+
+interface DialogContentProps {
+	onChange?: (val: DepartmentInfo) => void
+}
+
+const DialogContent = ({ onChange = () => {} }: DialogContentProps) => {
+	const [departmentInfo, setDepartmentInfo] = useState({
+		department_name: '',
+		locations: [''],
+	})
+
+	return (
+		<div className="py-2">
+			<TextField
+				size="small"
+				label={`部门名称`}
+				onChange={(e) => {
+					setDepartmentInfo({
+						...departmentInfo,
+						department_name: e.target.value,
+					})
+					onChange(departmentInfo)
+				}}
+			/>
+
+			<DynamicInput
+				label="办公室"
+				onChange={(val) => {
+					setDepartmentInfo({
+						...departmentInfo,
+						locations: val,
+					})
+					onChange(departmentInfo)
+				}}
+			/>
+		</div>
+	)
+}
+
 interface DynamicInputProps {
 	label: string
-	values: string[]
-	setValues: Dispatch<SetStateAction<string[]>>
+	onChange?: (data: string[]) => void
 }
 
 const DynamicInput = (props: DynamicInputProps) => {
-	const { values, label, setValues } = props
+	const { label, onChange = () => {} } = props
 
-	const length = values.length
+	const [inputVals, setInputVals] = useState<Array<string>>([''])
+	const [inputKeys, setInputKeys] = useState([nanoid(6)])
+
+	useEffect(() => {
+		onChange(inputVals)
+	}, [inputVals])
 
 	return (
-		<>
-			{values.map((val, index) => (
-				<div className="flex items-center py-2" key={val + index}>
-					<CustomInput
-						label={`${label + (index + 1)}`}
+		<div className="py-2">
+			{inputKeys.map((inputKey, index) => (
+				<div key={inputKey} className="py-2">
+					<TextField
 						size="small"
-						value={val}
-						onChange={(val) =>
-							setValues((old) => ((old[index] = val), [...old]))
-						}
+						label={label + (index + 1)}
+						onChange={(e) => {
+							setInputVals((old) => {
+								old[index] = e.target.value
+								return [...old]
+							})
+						}}
 					/>
 
-					{length - 1 === index ? (
-						<Tooltip title="新增">
+					{inputKeys.length - 1 === index ? (
+						<Tooltip title="增加" placement="right">
 							<IconButton
-								onClick={() => setValues((old) => [...old, ''])}
-								sx={{ fontSize: 15 }}
 								size="small"
+								onClick={() => (
+									setInputKeys((old) => [...old, nanoid(6)]),
+									setInputVals((old) => [...old, ''])
+								)}
 							>
-								<AddCircleOutlineIcon color="primary" sx={{ fontSize: 18 }} />
+								<AddCircleOutlineIcon color="primary" />
 							</IconButton>
 						</Tooltip>
 					) : (
-						<Tooltip title="删除">
+						<Tooltip title="删除" placement="right">
 							<IconButton
-								size="small"
 								onClick={() => {
-									setValues((old) => values.filter((item, idx) => idx != index))
+									setInputKeys((old) => {
+										old.splice(index, 1)
+										return [...old]
+									})
+									setInputVals((old) => {
+										old.splice(index, 1)
+										return [...old]
+									})
 								}}
+								size="small"
 							>
-								<DeleteIcon color={'error'} sx={{ fontSize: 18 }} />
+								<DeleteIcon color="primary" />
 							</IconButton>
 						</Tooltip>
 					)}
 				</div>
 			))}
-		</>
-	)
-}
-
-const DialogContent = (props: DynamicInputProps) => {
-	const { label, values, setValues } = props
-
-	return (
-		<div className="p-2 flex flex-wrap justify-between w-16.8rem">
-			<TextField label={`部门`} size="small" sx={{ pb: '6px' }} />
-			<DynamicInput label={label} values={values} setValues={setValues} />
 		</div>
-	)
-}
-
-interface CustomInputProps extends Omit<TextFieldProps, 'onChange'> {
-	onChange?: (val: string) => void
-}
-
-const CustomInput = (props: CustomInputProps) => {
-	const { onChange, value = '', ...prop } = props
-
-	const [val, setValue] = useState(String(value))
-
-	return (
-		<TextField
-			{...prop}
-			value={val}
-			onChange={(e) => setValue(e.target.value || '')}
-			onBlur={() => onChange && onChange(val)}
-		/>
 	)
 }

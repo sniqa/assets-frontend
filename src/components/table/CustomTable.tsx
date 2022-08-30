@@ -1,17 +1,23 @@
-import { Paper } from '@mui/material'
-import { usePagination } from '@table-library/react-table-library/pagination'
-import { useRowSelect } from '@table-library/react-table-library/select'
-import { Table, TableNode } from '@table-library/react-table-library/table'
-import { useTheme } from '@table-library/react-table-library/theme'
-import { Virtualized } from '@table-library/react-table-library/virtualized'
-import { useEffect, useMemo, useState } from 'react'
-import { downloadTable } from './share'
-import TableBody from './TableBody'
-import TableHeader from './TableHeader'
-import TablePagination from './TablePagination'
-import TableToolbar from './TableToolbar'
+import { Paper } from "@mui/material"
+import { usePagination } from "@table-library/react-table-library/pagination"
+import { useRowSelect } from "@table-library/react-table-library/select"
+import {
+	Header,
+	HeaderRow,
+	HeaderCell,
+	Table,
+	TableNode,
+} from "@table-library/react-table-library/table"
+import { useTheme } from "@table-library/react-table-library/theme"
+import { Virtualized } from "@table-library/react-table-library/virtualized"
+import { useEffect, useMemo, useState } from "react"
+import { downloadTable } from "./share"
+import TableBody from "./TableBody"
+import TableHeader from "./TableHeader"
+import TablePagination from "./TablePagination"
+import TableToolbar from "./TableToolbar"
 
-import { CustomTableProps, SearchCondition } from './types'
+import { CustomTableProps, SearchCondition } from "./types"
 
 const scrollbar = `scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full`
 
@@ -134,51 +140,55 @@ const CustomTable = (props: CustomTableProps) => {
 			</section>
 
 			<section className={`table-height-normal ${scrollbar}`}>
-				<Table
-					data={{ nodes: filterData }}
-					theme={theme}
-					select={select}
-					layout={{
-						isDiv: true,
-						custom: true,
-						horizontalScroll: true,
-						fixedHeader: true,
-					}}
-					pagination={pagination}
-					className={`${scrollbar}`}
-				>
-					{(rowsWithId) => (
-						<Virtualized
-							tableList={rowsWithId}
-							rowHeight={38}
-							header={() => (
-								<TableHeader
-									select={select}
-									columns={columnsWithSelect}
-									filter={hiddenColumns}
-									operate={operate}
-								/>
-							)}
-							body={(node, index) => (
-								<TableBody
-									select={select}
-									columns={columnsWithSelect}
-									row={node}
-									filter={hiddenColumns}
-									oprate={operate}
-								/>
-							)}
-							tableOptions={{
-								renderBeforeTable: undefined,
-								renderAfterTable: undefined,
-							}}
-							rowOptions={{
-								renderBeforeRow: undefined,
-								renderAfterRow: undefined,
-							}}
-						/>
-					)}
-				</Table>
+				{rowsWithId.length > 0 ? (
+					<Table
+						data={{ nodes: filterData }}
+						theme={theme}
+						select={select}
+						layout={{
+							isDiv: true,
+							custom: true,
+							horizontalScroll: true,
+							fixedHeader: true,
+						}}
+						pagination={pagination}
+						className={`${scrollbar}`}
+					>
+						{(rowsWithId) => (
+							<Virtualized
+								tableList={rowsWithId}
+								rowHeight={38}
+								header={() => (
+									<TableHeader
+										select={select}
+										columns={columnsWithSelect}
+										filter={hiddenColumns}
+										operate={operate}
+									/>
+								)}
+								body={(node, index) => (
+									<TableBody
+										select={select}
+										columns={columnsWithSelect}
+										row={node}
+										filter={hiddenColumns}
+										oprate={operate}
+									/>
+								)}
+								tableOptions={{
+									renderBeforeTable: undefined,
+									renderAfterTable: undefined,
+								}}
+								rowOptions={{
+									renderBeforeRow: undefined,
+									renderAfterRow: undefined,
+								}}
+							/>
+						)}
+					</Table>
+				) : (
+					<div className="w-full border p-1 rounded text-center border-green-500 text-gray-500">{`没有数据`}</div>
+				)}
 			</section>
 
 			<section>

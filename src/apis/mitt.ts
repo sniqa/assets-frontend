@@ -1,6 +1,6 @@
 import mitt, { Emitter } from 'mitt'
-import { NoticebarStatus } from '../components/layouts/Noticebar'
-import { ConfirmbarState } from '../types'
+// import { NoticebarStatus } from '../components/layouts/Noticebar'
+import { ConfirmbarState, NoticebarStatus } from '../types'
 
 type MittEvents = {
 	notice: NoticebarStatus
