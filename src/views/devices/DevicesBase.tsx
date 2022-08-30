@@ -1,23 +1,23 @@
-import { Button } from "@mui/material"
-import { useEffect, useMemo, useState } from "react"
-import { AddIcon } from "../../components/icons"
+import { Button } from '@mui/material'
+import { useEffect, useMemo, useState } from 'react'
+import { AddIcon } from '../../components/icons'
 import Table, {
 	TableColumn,
 	TableDialog,
 	TableRow,
 	TableToolbarExtensions,
-} from "../../components/table"
-import AnimateWraper from "../../components/transition/AnimateWraper"
-import EditDialog from "../../components/dialogs/EditDialog"
-import AddDialog from "../../components/dialogs/AddDialog"
-import { _fetch } from "../../apis/fetch"
-import { notice, confirm } from "../../apis/mitt"
+} from '../../components/table'
+import AnimateWraper from '../../components/transition/AnimateWraper'
+import EditDialog from '../../components/dialogs/EditDialog'
+import AddDialog from '../../components/dialogs/AddDialog'
+import { _fetch } from '../../apis/fetch'
+import { notice, confirm } from '../../apis/mitt'
 
 const columns: TableColumn[] = [
-	{ label: "设备型号", field: "device_model" },
-	{ label: "设备类型", field: "device_type" },
-	{ label: "出厂日期", field: "manufacture_date" },
-	{ label: "保质期", field: "shelf_life" },
+	{ label: '设备型号', field: 'device_model' },
+	{ label: '设备类型', field: 'device_type' },
+	{ label: '出厂日期', field: 'manufacture_date' },
+	{ label: '保质期', field: 'shelf_life' },
 ]
 
 const DevicesBase = () => {
@@ -28,7 +28,7 @@ const DevicesBase = () => {
 	const [deviceBaseRows, setDeviceBaseRows] = useState<TableRow[]>([])
 
 	const [selectRow, setSelectRow] = useState<TableRow>({
-		_id: "",
+		_id: '',
 	})
 
 	// 创建
@@ -43,18 +43,18 @@ const DevicesBase = () => {
 				? (setDeviceBaseRows((old) => [{ ...data, ...deviceInfo }, ...old]),
 				  setOpenDialog(false),
 				  notice({
-						status: "success",
-						message: "创建设备基础资料成功",
+						status: 'success',
+						message: '创建设备基础资料成功',
 				  }))
 				: notice({
-						status: "error",
+						status: 'error',
 						message: errmsg,
 				  })
 		}
 
 		return notice({
-			status: "error",
-			message: "创建设备基础资料失败",
+			status: 'error',
+			message: '创建设备基础资料失败',
 		})
 	}
 
@@ -71,26 +71,26 @@ const DevicesBase = () => {
 				  ),
 				  setOpenEditDialog(false),
 				  notice({
-						status: "success",
-						message: "更新成功",
+						status: 'success',
+						message: '更新成功',
 				  }))
 				: notice({
-						status: "error",
+						status: 'error',
 						message: errmsg,
 				  })
 		}
 
 		return notice({
-			status: "error",
-			message: "更新失败",
+			status: 'error',
+			message: '更新失败',
 		})
 	}
 
 	// 删除
 	const onDeleteSelection = async (ids: (string | number)[]) => {
 		const res = await confirm({
-			title: "提示",
-			message: "确定删除选中的项目？其他依赖此项的数据将会清空此项数据",
+			title: '提示',
+			message: '确定删除选中的项目？其他依赖此项的数据将会清空此项数据',
 		})
 
 		if (!res) {
@@ -106,24 +106,24 @@ const DevicesBase = () => {
 				? (setDeviceBaseRows((olds) =>
 						olds.filter((oldRow) => !ids.includes(oldRow._id))
 				  ),
-				  notice({ status: "success", message: "删除成功" }))
-				: notice({ status: "error", message: errmsg })
+				  notice({ status: 'success', message: '删除成功' }))
+				: notice({ status: 'error', message: errmsg })
 		}
 
-		return notice({ status: "error", message: "删除失败" })
+		return notice({ status: 'error', message: '删除失败' })
 	}
 
 	const extensions: TableToolbarExtensions = [
 		{
 			icon: <AddIcon color="primary" />,
-			title: "新增",
+			title: '新增',
 			onClick: () => setOpenDialog(!openDialog),
 		},
 	]
 
 	const operate = useMemo(
 		() => ({
-			header: "操作",
+			header: '操作',
 			cell: (row: any) => (
 				<Button onClick={() => (setSelectRow(row), setOpenEditDialog(true))}>
 					{`编辑`}
@@ -186,7 +186,3 @@ const DevicesBase = () => {
 }
 
 export default DevicesBase
-
-const DevicesBaseDetail = () => {
-	return <div className=""></div>
-}

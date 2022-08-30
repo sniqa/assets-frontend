@@ -1,4 +1,4 @@
-import { notice } from '../store/notice'
+import { notice } from './mitt'
 
 const url = 'http://localhost'
 

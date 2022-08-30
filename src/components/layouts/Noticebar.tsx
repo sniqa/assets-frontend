@@ -2,7 +2,7 @@ import { Alert, AlertColor, Snackbar, SnackbarCloseReason } from '@mui/material'
 import { useState } from 'react'
 import { emitter } from '../../apis/mitt'
 import { useAppDispatch, useAppSelector } from '../../store'
-import { notice, removeNotice } from '../../store/notice'
+// import { notice, removeNotice } from '../../store/notice'
 import { NoticebarStatus } from '../../types'
 
 // export interface NoticebarStatus {
@@ -50,7 +50,7 @@ const Noticebar = () => {
 		<Snackbar
 			open={alertMsg.message != ''}
 			autoHideDuration={3000}
-			onClose={() => setAlertMsg({ status: 'success', message: '' })}
+			onClose={() => setAlertMsg({ ...alertMsg, message: '' })}
 			message={alertMsg.message}
 			anchorOrigin={{
 				vertical: 'top',
