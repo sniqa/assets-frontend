@@ -34,9 +34,14 @@ const Department = () => {
 
 	const [openEditDialog, setOpenEditDialog] = useState(false)
 
-	const [departmentRows, setDepartmentRows] = useState<TableRow[]>([])
+	const [departmentRows, setDepartmentRows] = useState<
+		TableRow<DepartmentInfo>[]
+	>([])
 
-	const [departmentInfo, setDepartmentInfo] = useState({
+	const [departmentInfo, setDepartmentInfo] = useState<
+		TableRow<DepartmentInfo>
+	>({
+		_id: '',
 		department_name: '',
 		locations: [''],
 	})
@@ -64,8 +69,10 @@ const Department = () => {
 		[]
 	)
 
-	const [selectRow, setSelectRow] = useState<TableRow>({
+	const [selectRow, setSelectRow] = useState<TableRow<DepartmentInfo>>({
 		_id: '',
+		department_name: '',
+		locations: [''],
 	})
 
 	// 创建
@@ -76,11 +83,12 @@ const Department = () => {
 			const { success, data, errmsg } = CREATE_DEPARTMENT
 
 			return success
-				? (setDepartmentRows([{ ...info, _id: data }, ...departmentRows]),
+				? (setDepartmentRows([{ ...info, ...data }, ...departmentRows]),
 				  notice({
 						status: 'success',
 						message: '创建成功',
-				  }))
+				  }),
+				  setOpenDialog(false))
 				: notice({
 						status: 'error',
 						message: errmsg,
@@ -95,9 +103,30 @@ const Department = () => {
 
 	// 更新
 	const updateDepartment = async () => {
-		const { MODIFY_DEPARTMENT } = await _fetch({ MODIFY_DEPARTMENT: selectRow })
+		const { MODIFY_DEPARTMENT } = await _fetch({
+			MODIFY_DEPARTMENT: departmentInfo,
+		})
 
-		console.log(MODIFY_DEPARTMENT)
+		if (MODIFY_DEPARTMENT) {
+			const { success, data, errmsg } = MODIFY_DEPARTMENT
+
+			return success
+				? (setDepartmentRows((olds) =>
+						olds.map((old) =>
+							old._id === selectRow._id ? departmentInfo : old
+						)
+				  ),
+				  notice({ status: 'success', message: '修改成功' }))
+				: notice({
+						status: 'error',
+						message: errmsg,
+				  })
+		}
+
+		return notice({
+			status: 'error',
+			message: `更新失败`,
+		})
 	}
 
 	//删除
@@ -177,8 +206,13 @@ const Department = () => {
 					open={openEditDialog}
 					onClose={() => setOpenEditDialog(false)}
 					title={`编辑`}
-					content={<div></div>}
-					onClick={() => updateDepartment()}
+					content={
+						<DialogContent
+							originDate={selectRow}
+							onChange={(val) => setDepartmentInfo(val)}
+						/>
+					}
+					onClick={() => (updateDepartment(), setOpenEditDialog(false))}
 				/>
 			) : (
 				<></>
@@ -195,37 +229,46 @@ interface DepartmentInfo {
 }
 
 interface DialogContentProps {
-	onChange?: (val: DepartmentInfo) => void
+	onChange?: (val: TableRow<DepartmentInfo>) => void
+	originDate?: TableRow<DepartmentInfo>
 }
 
-const DialogContent = ({ onChange = () => {} }: DialogContentProps) => {
-	const [departmentInfo, setDepartmentInfo] = useState({
+const DialogContent = ({
+	onChange = () => {},
+	originDate = {
 		department_name: '',
 		locations: [''],
-	})
+		_id: '',
+	},
+}: DialogContentProps) => {
+	const [departmentInfo, setDepartmentInfo] = useState(originDate)
+
+	useEffect(() => {
+		onChange(departmentInfo as any)
+	}, [departmentInfo])
 
 	return (
 		<div className="py-2">
 			<TextField
 				size="small"
 				label={`部门名称`}
+				value={departmentInfo.department_name || ''}
 				onChange={(e) => {
 					setDepartmentInfo({
 						...departmentInfo,
 						department_name: e.target.value,
 					})
-					onChange(departmentInfo)
 				}}
 			/>
 
 			<DynamicInput
 				label="办公室"
+				value={departmentInfo.locations || ['']}
 				onChange={(val) => {
 					setDepartmentInfo({
 						...departmentInfo,
 						locations: val,
 					})
-					onChange(departmentInfo)
 				}}
 			/>
 		</div>
@@ -235,13 +278,14 @@ const DialogContent = ({ onChange = () => {} }: DialogContentProps) => {
 interface DynamicInputProps {
 	label: string
 	onChange?: (data: string[]) => void
+	value?: string[]
 }
 
 const DynamicInput = (props: DynamicInputProps) => {
-	const { label, onChange = () => {} } = props
+	const { label, onChange = () => {}, value = [''] } = props
 
-	const [inputVals, setInputVals] = useState<Array<string>>([''])
-	const [inputKeys, setInputKeys] = useState([nanoid(6)])
+	const [inputVals, setInputVals] = useState<Array<string>>(value)
+	const [inputKeys, setInputKeys] = useState(createUuidString(value.length))
 
 	useEffect(() => {
 		onChange(inputVals)
@@ -254,6 +298,7 @@ const DynamicInput = (props: DynamicInputProps) => {
 					<TextField
 						size="small"
 						label={label + (index + 1)}
+						value={inputVals[index]}
 						onChange={(e) => {
 							setInputVals((old) => {
 								old[index] = e.target.value
@@ -297,4 +342,13 @@ const DynamicInput = (props: DynamicInputProps) => {
 			))}
 		</div>
 	)
+}
+
+const createUuidString = (length: number) => {
+	const temp: string[] = []
+	for (let i = 0; i < length; i++) {
+		temp.push(nanoid())
+	}
+
+	return temp
 }

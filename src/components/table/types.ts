@@ -23,10 +23,9 @@ export interface Operate {
 	cell: (value: any) => JSX.Element
 }
 
-export interface TableRow {
+export type TableRow<T = {}> = {
 	_id: string
-	[x: string]: any
-}
+} & T
 
 export interface CustomTableProps {
 	columns: TableColumn[]

@@ -3,6 +3,9 @@ import { useMemo, useState } from 'react'
 import { _fetch } from '../../apis/fetch'
 import { notice } from '../../apis/mitt'
 import AddDialog from '../../components/dialogs/AddDialog'
+import CustomDialog, {
+	CustomDialogContentProps,
+} from '../../components/dialogs/CustomDialog'
 import EditDialog from '../../components/dialogs/EditDialog'
 import { AddIcon } from '../../components/icons'
 import Table, { TableToolbarExtensions } from '../../components/table'
@@ -26,6 +29,8 @@ const User = () => {
 
 	const [openDialog, setOpenDialog] = useState(false)
 
+	const [openCustomDialog, setOpenCustomDialog] = useState(true)
+
 	const extensions: TableToolbarExtensions = useMemo(() => {
 		return [
 			{
@@ -35,29 +40,6 @@ const User = () => {
 			},
 		]
 	}, [])
-
-	// const AddContent = useMemo<AddDialogContent[]>(
-	// 	() => [
-	// 		{
-	// 			label: '用户名称',
-	// 			field: 'username',
-	// 			required: true,
-	// 		},
-	// 		{
-	// 			label: '部门',
-	// 			field: 'department',
-	// 		},
-	// 		{
-	// 			label: '部门',
-	// 			field: 'department',
-	// 		},
-	// 		{
-	// 			label: 'number',
-	// 			field: 'number',
-	// 		},
-	// 	],
-	// 	[]
-	// )
 
 	// 新增用户
 	const handleCreateUser = async (userInfo: Partial<UserInfo>) => {
@@ -128,6 +110,23 @@ const User = () => {
 		[]
 	)
 
+	const CustomContent: CustomDialogContentProps[] = [
+		{
+			label: '用户名称',
+			type: 'text',
+			required: true,
+		},
+		{
+			label: '部门',
+			type: 'select',
+			options: ['hello', 'world', 'yes'],
+		},
+		{
+			label: '职位',
+			type: 'select',
+		},
+	]
+
 	return (
 		<AnimateWraper className="w-full">
 			<Table
@@ -137,31 +136,29 @@ const User = () => {
 				operate={operate}
 				onDeleteSelection={(data) => handleDeleteUser(data)}
 			/>
-			<AddDialog
-				open={openDialog}
-				onClose={() => setOpenDialog(!openDialog)}
-				title={`新增用户`}
-				content={columns}
-				onAdd={(val) => handleCreateUser(val)}
-			/>
-
 			{/* <AddDialog
 				open={openDialog}
 				onClose={() => setOpenDialog(!openDialog)}
 				title={`新增用户`}
 				content={columns}
-				originData={editData}
 				onAdd={(val) => handleCreateUser(val)}
 			/> */}
 
-			<EditDialog
+			<CustomDialog
+				title="测试"
+				open={openCustomDialog}
+				onClose={() => setOpenCustomDialog(false)}
+				contents={CustomContent}
+			/>
+
+			{/* <EditDialog
 				open={openDialog}
 				onClose={() => setOpenDialog(!openDialog)}
 				title={`新增用户`}
 				content={columns}
 				originData={editData}
 				onAdd={(val) => handleModifyUser(val)}
-			/>
+			/> */}
 		</AnimateWraper>
 	)
 }

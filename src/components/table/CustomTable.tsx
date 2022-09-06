@@ -1,23 +1,23 @@
-import { Paper } from "@mui/material"
-import { usePagination } from "@table-library/react-table-library/pagination"
-import { useRowSelect } from "@table-library/react-table-library/select"
+import { Paper } from '@mui/material'
+import { usePagination } from '@table-library/react-table-library/pagination'
+import { useRowSelect } from '@table-library/react-table-library/select'
 import {
 	Header,
 	HeaderRow,
 	HeaderCell,
 	Table,
 	TableNode,
-} from "@table-library/react-table-library/table"
-import { useTheme } from "@table-library/react-table-library/theme"
-import { Virtualized } from "@table-library/react-table-library/virtualized"
-import { useEffect, useMemo, useState } from "react"
-import { downloadTable } from "./share"
-import TableBody from "./TableBody"
-import TableHeader from "./TableHeader"
-import TablePagination from "./TablePagination"
-import TableToolbar from "./TableToolbar"
+} from '@table-library/react-table-library/table'
+import { useTheme } from '@table-library/react-table-library/theme'
+import { Virtualized } from '@table-library/react-table-library/virtualized'
+import { useEffect, useMemo, useState } from 'react'
+import { downloadTable } from './share'
+import TableBody from './TableBody'
+import TableHeader from './TableHeader'
+import TablePagination from './TablePagination'
+import TableToolbar from './TableToolbar'
 
-import { CustomTableProps, SearchCondition } from "./types"
+import { CustomTableProps, SearchCondition } from './types'
 
 const scrollbar = `scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full`
 
@@ -101,6 +101,32 @@ const CustomTable = (props: CustomTableProps) => {
 				if (!field && !value) return filterData
 
 				const { id, ...nodes } = row
+
+				// 搜索关键字包含','表示并且的关系
+				if (value.includes(',')) {
+					const keywords = value.split(',')
+
+					return field
+						? String(row[field]).includes(value)
+						: keywords.every((keyword) =>
+								Object.values(nodes).some(
+									(val) => String(val).includes(keyword) || false
+								)
+						  )
+				}
+
+				// 搜索关键字包含';'表示或者的关系
+				if (value.includes(';')) {
+					const keywords = value.split(';')
+
+					return field
+						? String(row[field]).includes(value)
+						: keywords.some((keyword) =>
+								Object.values(nodes).some(
+									(val) => String(val).includes(keyword) || false
+								)
+						  )
+				}
 
 				return field
 					? String(row[field]).includes(value)
