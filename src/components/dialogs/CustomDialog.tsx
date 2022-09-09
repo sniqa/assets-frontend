@@ -24,6 +24,8 @@ interface CustomDialogProps {
 const CustomDialog = (props: CustomDialogProps) => {
 	const { title, open, onClose, onOk = () => {}, contents } = props
 
+	const [val, setVal] = useState()
+
 	return (
 		<Dialog open={open} onClose={onClose}>
 			<DialogTitle>{title}</DialogTitle>
@@ -31,7 +33,7 @@ const CustomDialog = (props: CustomDialogProps) => {
 			<DialogContent className={`w-32rem p-4 flex flex-wrap`}>
 				{contents.map((content) => (
 					<div className="w-1/2 p-2" key={content.label}>
-						<CustomDialogContent {...content} />
+						<CustomDialogContent {...content}  />
 					</div>
 				))}
 			</DialogContent>
@@ -41,7 +43,7 @@ const CustomDialog = (props: CustomDialogProps) => {
 				<Button
 					variant="contained"
 					disableElevation
-					// onClick={() => onOk(value)}
+					onClick={onOk}
 				>{`确定`}</Button>
 			</DialogActions>
 		</Dialog>

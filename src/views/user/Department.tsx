@@ -23,6 +23,8 @@ import AnimateWraper from '../../components/transition/AnimateWraper'
 
 import { nanoid } from 'nanoid'
 import { notice, confirm } from '../../apis/mitt'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { addDepartment, deleteManyDepartment, updateDepartment } from '../../store/department'
 
 const columns: TableColumn[] = [
 	{ label: '部门', field: 'department_name' },
@@ -30,13 +32,13 @@ const columns: TableColumn[] = [
 ]
 
 const Department = () => {
+	const departmentRows = useAppSelector((state) => state.department)
+
+	const dispatch = useAppDispatch()
+
 	const [openDialog, setOpenDialog] = useState(false)
 
 	const [openEditDialog, setOpenEditDialog] = useState(false)
-
-	const [departmentRows, setDepartmentRows] = useState<
-		TableRow<DepartmentInfo>[]
-	>([])
 
 	const [departmentInfo, setDepartmentInfo] = useState<
 		TableRow<DepartmentInfo>
@@ -83,7 +85,7 @@ const Department = () => {
 			const { success, data, errmsg } = CREATE_DEPARTMENT
 
 			return success
-				? (setDepartmentRows([{ ...info, ...data }, ...departmentRows]),
+				? (dispatch(addDepartment({ ...info, ...data })),
 				  notice({
 						status: 'success',
 						message: '创建成功',
@@ -102,7 +104,7 @@ const Department = () => {
 	}
 
 	// 更新
-	const updateDepartment = async () => {
+	const handlerUpdateDepartment = async () => {
 		const { MODIFY_DEPARTMENT } = await _fetch({
 			MODIFY_DEPARTMENT: departmentInfo,
 		})
@@ -111,11 +113,7 @@ const Department = () => {
 			const { success, data, errmsg } = MODIFY_DEPARTMENT
 
 			return success
-				? (setDepartmentRows((olds) =>
-						olds.map((old) =>
-							old._id === selectRow._id ? departmentInfo : old
-						)
-				  ),
+				? (dispatch(updateDepartment(departmentInfo)),
 				  notice({ status: 'success', message: '修改成功' }))
 				: notice({
 						status: 'error',
@@ -146,9 +144,7 @@ const Department = () => {
 			const { success, data, errmsg } = DELETE_DEPARTMENT
 
 			return success
-				? (setDepartmentRows((olds) =>
-						olds.filter((old) => !ids.includes(old._id))
-				  ),
+				? (dispatch(deleteManyDepartment(ids)),
 				  notice({
 						status: 'success',
 						message: '删除成功',
@@ -165,19 +161,7 @@ const Department = () => {
 		})
 	}
 
-	// 初始化
-	useEffect(() => {
-		const getDepartment = async () => {
-			const { FIND_DEPARTMENT } = await _fetch({ FIND_DEPARTMENT: {} })
-
-			if (FIND_DEPARTMENT) {
-				const { success, data, errmsg } = FIND_DEPARTMENT
-				return success && setDepartmentRows(data)
-			}
-		}
-
-		getDepartment()
-	}, [])
+	
 
 	return (
 		<AnimateWraper className="w-full">
@@ -212,7 +196,7 @@ const Department = () => {
 							onChange={(val) => setDepartmentInfo(val)}
 						/>
 					}
-					onClick={() => (updateDepartment(), setOpenEditDialog(false))}
+					onClick={() => (handlerUpdateDepartment(), setOpenEditDialog(false))}
 				/>
 			) : (
 				<></>

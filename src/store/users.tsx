@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { _fetch } from '../apis/fetch'
 import { UserInfo } from '../types'
 
-const getUser = async () => {
+const getUser = async ():Promise<Array<UserInfo>> => {
 	const { findUsers } = await _fetch({ findUsers: {} })
 
 	if (findUsers) {
@@ -16,7 +16,7 @@ const getUser = async () => {
 
 export const userSlice = createSlice({
 	name: 'user',
-	initialState: await getUser().then((res) => res as UserInfo[]),
+	initialState: await getUser().catch(err => []) || [],
 	reducers: {
 		setUsers: (state, action: PayloadAction<Array<UserInfo>>) => {
 			return (state = action.payload)
@@ -32,10 +32,10 @@ export const userSlice = createSlice({
 		findUsers: (state, action: PayloadAction<UserInfo>) => {
 			return state.filter((user) => user === action.payload)
 		},
-		deleteManyUser: (state, action: PayloadAction<Array<UserInfo>>) => {
+		deleteManyUser: (state, action: PayloadAction<Array<string | number>>) => {
 			return state.filter(
 				(user) =>
-					!action.payload.some((targetUser) => targetUser._id === user._id)
+					!action.payload.some((target) => target === user._id)
 			)
 		},
 	},

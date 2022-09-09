@@ -12,6 +12,9 @@ import EditDialog from '../../components/dialogs/EditDialog'
 import AddDialog from '../../components/dialogs/AddDialog'
 import { _fetch } from '../../apis/fetch'
 import { notice, confirm } from '../../apis/mitt'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { addDeviceBase, updateDeviceBase, deleteManyDeviceBase } from '../../store/deviceBase'
+import type { DeviceBaseInfo } from '../../types'
 
 const columns: TableColumn[] = [
 	{ label: '设备型号', field: 'device_model' },
@@ -21,11 +24,14 @@ const columns: TableColumn[] = [
 ]
 
 const DevicesBase = () => {
+	const deviceBaseRows = useAppSelector(state => state.deviceBase)
+
+	const dispatch = useAppDispatch()
+
 	const [openDialog, setOpenDialog] = useState(false)
 
 	const [openEditDialog, setOpenEditDialog] = useState(false)
 
-	const [deviceBaseRows, setDeviceBaseRows] = useState<TableRow[]>([])
 
 	const [selectRow, setSelectRow] = useState<TableRow>({
 		_id: '',
@@ -40,7 +46,7 @@ const DevicesBase = () => {
 		if (CREATE_DEVICE_BASE) {
 			const { success, data, errmsg } = CREATE_DEVICE_BASE
 			return success
-				? (setDeviceBaseRows((old) => [{ ...data, ...deviceInfo }, ...old]),
+				? (dispatch(addDeviceBase({ ...deviceInfo, ...data })),
 				  setOpenDialog(false),
 				  notice({
 						status: 'success',
@@ -59,16 +65,14 @@ const DevicesBase = () => {
 	}
 
 	// 更新
-	const updateDeviceBase = async (val: TableRow) => {
+	const updateDeviceBases = async (val: TableRow<DeviceBaseInfo>) => {
 		const { MODIFY_DEVICE_BASE } = await _fetch({ MODIFY_DEVICE_BASE: val })
 
 		if (MODIFY_DEVICE_BASE) {
 			const { success, data, errmsg } = MODIFY_DEVICE_BASE
 
 			return success
-				? (setDeviceBaseRows((olds) =>
-						olds.map((oldRow) => (oldRow._id === val._id ? val : oldRow))
-				  ),
+				? (dispatch(updateDeviceBase(val)),
 				  setOpenEditDialog(false),
 				  notice({
 						status: 'success',
@@ -103,9 +107,7 @@ const DevicesBase = () => {
 			const { success, data, errmsg } = DELETE_DEVICE_BASE
 
 			return success
-				? (setDeviceBaseRows((olds) =>
-						olds.filter((oldRow) => !ids.includes(oldRow._id))
-				  ),
+				? (dispatch(deleteManyDeviceBase(ids)),
 				  notice({ status: 'success', message: '删除成功' }))
 				: notice({ status: 'error', message: errmsg })
 		}
@@ -132,20 +134,6 @@ const DevicesBase = () => {
 		}),
 		[]
 	)
-
-	useEffect(() => {
-		const getDeviceBase = async () =>
-			await _fetch({ FIND_DEVICE_BASE: {} }).then((res) => {
-				const { FIND_DEVICE_BASE } = res
-
-				if (FIND_DEVICE_BASE) {
-					const { success, data } = FIND_DEVICE_BASE
-					success && setDeviceBaseRows(data)
-				}
-			})
-
-		getDeviceBase()
-	}, [])
 
 	return (
 		<AnimateWraper className="w-full">
@@ -175,7 +163,7 @@ const DevicesBase = () => {
 					onClose={() => setOpenEditDialog(false)}
 					title={`更改基础资料`}
 					content={columns}
-					onEdit={(val) => updateDeviceBase(val)}
+					onEdit={(val) => updateDeviceBases(val)}
 					originData={selectRow}
 				/>
 			) : (

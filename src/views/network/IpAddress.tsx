@@ -1,7 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import { Button } from '@mui/material'
+import React, { useEffect, useMemo, useState } from 'react'
 import { _fetch } from '../../apis/fetch'
-import Table from '../../components/table'
+import { notice } from '../../apis/mitt'
+import CustomDialog, {
+	CustomDialogContentProps,
+} from '../../components/dialogs/CustomDialog'
+import Table, { Operate, TableToolbarExtensions } from '../../components/table'
 import AnimateWraper from '../../components/transition/AnimateWraper'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { updateIpAddress } from '../../store/ipAddress'
+import { IpAddressInfo } from '../../types'
 
 const columns = [
 	{
@@ -17,35 +25,76 @@ const columns = [
 ]
 
 const IpAddress = () => {
-	const [ipRows, setIpRows] = useState([])
+	const ipAddressRows = useAppSelector((state) => state.ipAddress)
+	const users = useAppSelector((state) => state.users)
 
-	useEffect(() => {
-		const getIps = async () => {
-			const { findIps } = await _fetch({ findIps: {} })
+	const [openDialog, setOpenDialog] = useState(false)
 
-			console.log(findIps)
+	const [curSelectRow, setCurSelectRow] = useState<IpAddressInfo | {}>({})
 
-			if (findIps) {
-				const { success, data } = findIps
+	const dispatch = useAppDispatch()
 
-				const newData = data.map((row: any) => ({
-					...row,
-					is_used: row['is_used'] ? '已使用' : '未使用',
-				}))
+	// 操作栏
+	const operate = useMemo<Operate>(
+		() => ({
+			header: '操作',
+			cell: (value) => (
+				<Button
+					onClick={() => (setCurSelectRow(value), setOpenDialog(true))}
+				>{`分配`}</Button>
+			),
+		}),
+		[]
+	)
 
-				console.log(newData)
+	// 分配ip
+	const contents: CustomDialogContentProps[] = [
+		{
+			label: '使用人',
+			type: 'select',
+			options: users.map((user) => user.username),
+			onChange: (val) => setCurSelectRow({ ...curSelectRow, username: val }),
+		},
+	]
 
-				success && setIpRows(newData)
+	const handlerAssignIp = async () => {
+		const { ASSIGN_IP_TO_PERSON } = await _fetch({
+			ASSIGN_IP_TO_PERSON: curSelectRow,
+		})
 
-				console.log(data)
-			}
+		if (ASSIGN_IP_TO_PERSON) {
+			const { success, data, errmsg } = ASSIGN_IP_TO_PERSON
+
+			console.log(ASSIGN_IP_TO_PERSON)
+
+			return success
+				? (dispatch(updateIpAddress(curSelectRow as IpAddressInfo)),
+				  notice({ status: 'success', message: '分配Ip成功' }),
+				  setOpenDialog(false))
+				: notice({ status: 'error', message: errmsg })
 		}
-		getIps()
-	}, [])
+
+		return notice({
+			status: 'error',
+			message: '分配Ip失败',
+		})
+	}
 
 	return (
 		<AnimateWraper className="w-full">
-			<Table columns={columns} rows={ipRows} />
+			<Table columns={columns} rows={ipAddressRows} operate={operate} />
+
+			{openDialog ? (
+				<CustomDialog
+					title="分配IP"
+					open={openDialog}
+					onClose={() => setOpenDialog(false)}
+					contents={contents}
+					onOk={handlerAssignIp}
+				></CustomDialog>
+			) : (
+				<></>
+			)}
 		</AnimateWraper>
 	)
 }

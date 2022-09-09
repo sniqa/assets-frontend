@@ -1,7 +1,14 @@
-import { TextField, Autocomplete } from '@mui/material'
+import {
+	TextField,
+	Autocomplete,
+	MenuItem,
+	Select,
+	FormControl,
+	InputLabel,
+} from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 
-export type InputType = 'text' | 'select'
+export type InputType = 'text' | 'select' | 'autoComplete'
 
 export interface CustomDialogContentProps {
 	label: string
@@ -10,6 +17,7 @@ export interface CustomDialogContentProps {
 	required?: boolean
 	rule?: (val: any) => boolean
 	options?: any[]
+	disabled?: boolean
 }
 
 const CustomDialogContent = (props: CustomDialogContentProps) => {
@@ -20,43 +28,73 @@ const CustomDialogContent = (props: CustomDialogContentProps) => {
 		required = false,
 		rule = () => {},
 		options = [],
+		disabled = false,
 	} = props
 
-	const [val, setVal] = useState('')
+	// const [val, setVal] = useState("");
 
 	const [helperText, setHelperText] = useState('')
-
-	useEffect(() => {
-		required && val.trim() === '' && setHelperText('不能为空')
-
-		onChange(val.trim())
-	}, [val])
 
 	const selectRender = useMemo(
 		() => ({
 			text: (
 				<TextField
+					error={helperText != ''}
+					disabled={disabled}
 					size="small"
 					label={label + `${required ? '*' : ''}`.trim()}
 					helperText={helperText}
-					onChange={(e) => setVal(e.target.value)}
+					onChange={(e) => {
+						const value = e.target.value
+
+						if (required) {
+							if (value.trim() === '') {
+								setHelperText('不能为空')
+							} else {
+								setHelperText('')
+								// setVal(value);
+								onChange(value)
+							}
+						}
+
+						onChange(value)
+					}}
 				/>
 			),
 			select: (
+				<FormControl fullWidth size={`small`} disabled={disabled}>
+					<InputLabel>{label}</InputLabel>
+					<Select
+						label={label}
+						defaultValue={''}
+						onChange={(e) => onChange(e.target.value)}
+						autoFocus
+						size="small"
+					>
+						{options.map((option) => (
+							<MenuItem key={option} value={option}>
+								{option || ''}
+							</MenuItem>
+						))}
+					</Select>
+				</FormControl>
+			),
+			autoComplete: (
 				<Autocomplete
+					disabled={disabled}
 					renderInput={(params) => (
 						<TextField
 							{...params}
 							size="small"
 							label={label}
-							onChange={(e) => setVal(e.target.value)}
+							onChange={(e) => onChange(e.target.value)}
 						/>
 					)}
 					options={options}
 				/>
 			),
 		}),
-		[]
+		[helperText]
 	)
 
 	return selectRender[type]

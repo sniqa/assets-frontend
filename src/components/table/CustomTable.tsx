@@ -81,6 +81,7 @@ const CustomTable = (props: CustomTableProps) => {
 			onChange: (action, state) => {
 				setSelectedRowsId(state.ids)
 			},
+			
 		}
 	)
 
@@ -161,7 +162,10 @@ const CustomTable = (props: CustomTableProps) => {
 							),
 						})
 					}
-					onDeleteSelection={() => onDeleteSelection(selectedRowsId)}
+					onDeleteSelection={() => {
+						onDeleteSelection(selectedRowsId)
+						setSelectedRowsId([])
+					}}
 				/>
 			</section>
 

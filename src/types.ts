@@ -26,12 +26,12 @@ export interface UserInfo {
 	nickname?: string
 	number?: number
 	department?: string
+	location?: string
 }
 
 export type UserInfoWithId = WithId & UserInfo
 
 // network type
-
 export interface NetworkTypeInfo {
 	_id: string
 	network_name: string
@@ -47,3 +47,34 @@ export interface NetworkTypeInfo {
 }
 
 export type NetworkTypeInfoWithId = WithId & NetworkTypeInfo
+
+// department
+export interface DepartmentInfo {
+	_id: string
+	department_name: string
+	locations: string[]
+}
+
+export type DepartmentInfoWithId = WithId & DepartmentInfo
+
+// deviceBase
+export interface DeviceBaseInfo {
+	_id: string
+	device_model: string //设备型号
+	device_type: string //设备类型
+	manufacture_date: string //出厂日期
+	shelf_life: string //保质期
+}
+
+export type DeviceBaseInfoWithId = WithId & DeviceBaseInfo
+
+// ip address
+export interface IpAddressInfo {
+	_id: string
+	username: string
+	ip_address: string
+	network_type: string
+	is_used: boolean
+}
+
+export type IpAddressInfoWithId = WithId & IpAddressInfo
