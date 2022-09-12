@@ -33,11 +33,15 @@ export type FaildRes = Res & ErrorRes
 
 export type SuccessRes<T = any> = Res & {}
 
-type Result<T = any> = {
+type Result<T> = {
 	[x: string]: Res<T>
 }
 
-export const _fetch = async (data: Record<string, any>): Promise<Result> => {
+type Request = Record<string, any> | Record<string, any>[]
+
+export const _fetch = async <T extends Request>(
+	data: T
+): Promise<T extends Record<string, any>[] ? Result<any>[] : Result<any>> => {
 	return fetch(`${url}:${port}${path}`, request(data))
 		.then((res) => res.ok && res.json())
 		.catch((err) =>

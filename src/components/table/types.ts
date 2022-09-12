@@ -60,7 +60,6 @@ export interface TableToolbarProps {
 export interface TableHeaderProps {
 	select: Select
 	columns: TableColumn[]
-	filter?: {}
 	operate?: Operate
 }
 
@@ -68,7 +67,6 @@ export interface TableBodyProps {
 	select: Select
 	row: any
 	columns: TableColumn[]
-	filter?: {}
 	oprate?: Operate
 }
 

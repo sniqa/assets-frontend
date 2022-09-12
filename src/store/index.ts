@@ -7,6 +7,7 @@ import confirmReducer from './confirm'
 import departmentReducer from './department'
 import deviceBaseReducer from './deviceBase'
 import ipAddressReducer from './ipAddress'
+import deviceReducer from './device'
 
 const store = configureStore({
 	reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
 		confirm: confirmReducer,
 		department: departmentReducer,
 		deviceBase: deviceBaseReducer,
+		device: deviceReducer,
 		ipAddress: ipAddressReducer,
 	},
 })

@@ -14,7 +14,7 @@ import AnimateWraper from '../../components/transition/AnimateWraper'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { addUser, deleteManyUser, updateUser } from '../../store/users'
 import { UserInfo } from '../../types'
-
+import { UserInfoTable } from '../../tables'
 const columns: TableColumn[] = [
 	{ label: '用户名称', field: 'username' },
 	{ label: '昵称', field: 'nickname' },
@@ -26,7 +26,7 @@ const columns: TableColumn[] = [
 const User = () => {
 	const rows = useAppSelector((state) => state.users)
 
-	const departments = useAppSelector(state => state.department)
+	const departments = useAppSelector((state) => state.department)
 
 	const dispatch = useAppDispatch()
 
@@ -46,13 +46,12 @@ const User = () => {
 
 	// 新增用户
 	const handleCreateUser = async (userInfo: Partial<UserInfo>) => {
-		const { createUser } = await _fetch({ createUser: userInfo })
+		const { create_user } = await _fetch({ create_user: userInfo })
 
-		if (createUser) {
-			const { success, data, errmsg } = createUser
+		if (create_user) {
+			const { success, data, errmsg } = create_user
 
-			console.log({ ...data, ...userInfo });
-			
+			console.log({ ...data, ...userInfo })
 
 			success
 				? (dispatch(addUser({ ...data, ...userInfo })),
@@ -64,11 +63,10 @@ const User = () => {
 
 	// 删除用户
 	const handleDeleteUser = async (ids: (string | number)[]) => {
-		
-		const {DELETE_USERS} = await _fetch({ DELETE_USERS: [ids] })
+		const { delete_user } = await _fetch({ delete_user: [ids] })
 
-		if (DELETE_USERS) {
-			const { success, data, errmsg } = DELETE_USERS
+		if (delete_user) {
+			const { success, data, errmsg } = delete_user
 
 			return success
 				? (dispatch(deleteManyUser(ids)),
@@ -77,15 +75,15 @@ const User = () => {
 		}
 		return notice({
 			status: 'error',
-			message: '删除失败'
+			message: '删除失败',
 		})
 	}
 
 	// 更新用户信息
 	const handleModifyUser = async (userInfo: UserInfo) => {
-		const { modifyUser } = await _fetch({ modifyUser: userInfo })
+		const { modify_user } = await _fetch({ modify_user: userInfo })
 
-		if (modifyUser.success) {
+		if (modify_user.success) {
 			dispatch(updateUser(userInfo))
 			setOpenEditDialog(false)
 			return notice({
@@ -96,7 +94,7 @@ const User = () => {
 
 		notice({
 			status: 'error',
-			message: modifyUser.errmsg,
+			message: modify_user.errmsg,
 		})
 	}
 
@@ -119,66 +117,65 @@ const User = () => {
 		[]
 	)
 
-
 	const [userInfo, setUserInfo] = useState({
 		username: '',
 		department: '',
-		location: ''
+		location: '',
 	})
 
-	const addContent: CustomDialogContentProps[] =  [
+	const addContent: CustomDialogContentProps[] = [
 		{
 			label: '用户名称',
 			type: 'text',
 			required: true,
-			onChange: (val) =>  setUserInfo(old => ({ ...old, username: val}))
+			onChange: (val) => setUserInfo((old) => ({ ...old, username: val })),
 		},
 		{
 			label: '部门',
 			type: 'select',
-			options: departments.map(department => department.department_name),
-			onChange: (val) =>  setUserInfo(old => ({ ...old, department: val}))
+			options: departments.map((department) => department.department_name),
+			onChange: (val) => setUserInfo((old) => ({ ...old, department: val })),
 		},
 		{
 			label: '办公室',
 			type: 'select',
-			options: departments.flatMap(department => department.locations),
-			onChange: (val) =>  setUserInfo(old => ({ ...old, location: val}))
+			options: departments.flatMap((department) => department.locations),
+			onChange: (val) => setUserInfo((old) => ({ ...old, location: val })),
 		},
-		
 	]
-	const editContent:CustomDialogContentProps[] = useMemo(() => [
-
-	], [departments]) 
+	const editContent: CustomDialogContentProps[] = useMemo(
+		() => [],
+		[departments]
+	)
 
 	return (
 		<AnimateWraper className="w-full">
-			<Table
-				columns={columns}
+			<UserInfoTable
+				// columns={columns}
 				rows={rows}
 				extensions={extensions}
 				operate={operate}
 				onDeleteSelection={(data) => handleDeleteUser(data)}
 			/>
 
-			{openAddDialog ? <CustomDialog
-				title="新增用户"
-				open={openAddDialog}
-				onClose={() => setOpenAddDialog(false)}
-				contents={addContent}
-				onOk={() => handleCreateUser(userInfo)}
-			/> : <></>}
+			{openAddDialog && (
+				<CustomDialog
+					title="新增用户"
+					open={openAddDialog}
+					onClose={() => setOpenAddDialog(false)}
+					contents={addContent}
+					onOk={() => handleCreateUser(userInfo)}
+				/>
+			)}
 
-			{
-				openEditDialog ? <CustomDialog 
+			{openEditDialog && (
+				<CustomDialog
 					title={`编辑用户`}
 					open={openEditDialog}
 					onClose={() => setOpenEditDialog(false)}
 					contents={editContent}
 				/>
-				:<></>
-			}
-
+			)}
 		</AnimateWraper>
 	)
 }

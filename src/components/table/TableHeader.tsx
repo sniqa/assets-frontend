@@ -5,7 +5,7 @@ import { TableHeaderProps } from './types'
 const resize = { resizerHighlight: '#dde2eb' }
 
 const TableHeader = (props: TableHeaderProps) => {
-	const { select, columns, filter = {}, operate } = props
+	const { select, columns, operate } = props
 
 	return (
 		<HeaderRow>

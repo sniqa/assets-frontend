@@ -13,18 +13,23 @@ import AddDialog from '../../components/dialogs/AddDialog'
 import { _fetch } from '../../apis/fetch'
 import { notice, confirm } from '../../apis/mitt'
 import { useAppDispatch, useAppSelector } from '../../store'
-import { addDeviceBase, updateDeviceBase, deleteManyDeviceBase } from '../../store/deviceBase'
+import {
+	addDeviceBase,
+	updateDeviceBase,
+	deleteManyDeviceBase,
+} from '../../store/deviceBase'
 import type { DeviceBaseInfo } from '../../types'
 
 const columns: TableColumn[] = [
 	{ label: '设备型号', field: 'device_model' },
 	{ label: '设备类型', field: 'device_type' },
+	{ label: '设备分类', field: 'category' },
 	{ label: '出厂日期', field: 'manufacture_date' },
 	{ label: '保质期', field: 'shelf_life' },
 ]
 
 const DevicesBase = () => {
-	const deviceBaseRows = useAppSelector(state => state.deviceBase)
+	const deviceBaseRows = useAppSelector((state) => state.deviceBase)
 
 	const dispatch = useAppDispatch()
 
@@ -32,19 +37,18 @@ const DevicesBase = () => {
 
 	const [openEditDialog, setOpenEditDialog] = useState(false)
 
-
 	const [selectRow, setSelectRow] = useState<TableRow>({
 		_id: '',
 	})
 
 	// 创建
 	const createDeviceBase = async (deviceInfo: any) => {
-		const { CREATE_DEVICE_BASE } = await _fetch({
-			CREATE_DEVICE_BASE: deviceInfo,
+		const { create_device_base } = await _fetch({
+			create_device_base: deviceInfo,
 		})
 
-		if (CREATE_DEVICE_BASE) {
-			const { success, data, errmsg } = CREATE_DEVICE_BASE
+		if (create_device_base) {
+			const { success, data, errmsg } = create_device_base
 			return success
 				? (dispatch(addDeviceBase({ ...deviceInfo, ...data })),
 				  setOpenDialog(false),
@@ -66,10 +70,10 @@ const DevicesBase = () => {
 
 	// 更新
 	const updateDeviceBases = async (val: TableRow<DeviceBaseInfo>) => {
-		const { MODIFY_DEVICE_BASE } = await _fetch({ MODIFY_DEVICE_BASE: val })
+		const { modify_device_base } = await _fetch({ modify_device_base: val })
 
-		if (MODIFY_DEVICE_BASE) {
-			const { success, data, errmsg } = MODIFY_DEVICE_BASE
+		if (modify_device_base) {
+			const { success, data, errmsg } = modify_device_base
 
 			return success
 				? (dispatch(updateDeviceBase(val)),
@@ -101,10 +105,10 @@ const DevicesBase = () => {
 			return
 		}
 
-		const { DELETE_DEVICE_BASE } = await _fetch({ DELETE_DEVICE_BASE: [ids] })
+		const { delete_device_base } = await _fetch({ delete_device_base: [ids] })
 
-		if (DELETE_DEVICE_BASE) {
-			const { success, data, errmsg } = DELETE_DEVICE_BASE
+		if (delete_device_base) {
+			const { success, data, errmsg } = delete_device_base
 
 			return success
 				? (dispatch(deleteManyDeviceBase(ids)),

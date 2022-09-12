@@ -22,10 +22,10 @@ const Logs = () => {
 
 	useEffect(() => {
 		const getLogs = () =>
-			_fetch({ FIND_LOGS: {} }).then((res) => {
-				const { FIND_LOGS } = res
-				if (FIND_LOGS) {
-					const { success, data } = FIND_LOGS
+			_fetch({ find_logs: {} }).then((res) => {
+				const { find_logs } = res
+				if (find_logs) {
+					const { success, data } = find_logs
 
 					success && setLogs(data)
 				}
@@ -52,10 +52,10 @@ const Logs = () => {
 			return
 		}
 
-		const { DELETE_LOGS } = await _fetch({ DELETE_LOGS: [info] })
+		const { delete_logs } = await _fetch({ delete_logs: [info] })
 
-		if (DELETE_LOGS) {
-			const { success, data, errmsg } = DELETE_LOGS
+		if (delete_logs) {
+			const { success, data, errmsg } = delete_logs
 
 			return success
 				? (setLogs((old) => old.filter((log) => !info.includes(log._id))),

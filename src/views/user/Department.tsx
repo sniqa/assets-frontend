@@ -24,7 +24,11 @@ import AnimateWraper from '../../components/transition/AnimateWraper'
 import { nanoid } from 'nanoid'
 import { notice, confirm } from '../../apis/mitt'
 import { useAppDispatch, useAppSelector } from '../../store'
-import { addDepartment, deleteManyDepartment, updateDepartment } from '../../store/department'
+import {
+	addDepartment,
+	deleteManyDepartment,
+	updateDepartment,
+} from '../../store/department'
 
 const columns: TableColumn[] = [
 	{ label: '部门', field: 'department_name' },
@@ -79,10 +83,10 @@ const Department = () => {
 
 	// 创建
 	const createDepartment = async (info: DepartmentInfo) => {
-		const { CREATE_DEPARTMENT } = await _fetch({ CREATE_DEPARTMENT: info })
+		const { create_department } = await _fetch({ create_department: info })
 
-		if (CREATE_DEPARTMENT) {
-			const { success, data, errmsg } = CREATE_DEPARTMENT
+		if (create_department) {
+			const { success, data, errmsg } = create_department
 
 			return success
 				? (dispatch(addDepartment({ ...info, ...data })),
@@ -105,12 +109,12 @@ const Department = () => {
 
 	// 更新
 	const handlerUpdateDepartment = async () => {
-		const { MODIFY_DEPARTMENT } = await _fetch({
-			MODIFY_DEPARTMENT: departmentInfo,
+		const { modify_department } = await _fetch({
+			modify_department: departmentInfo,
 		})
 
-		if (MODIFY_DEPARTMENT) {
-			const { success, data, errmsg } = MODIFY_DEPARTMENT
+		if (modify_department) {
+			const { success, data, errmsg } = modify_department
 
 			return success
 				? (dispatch(updateDepartment(departmentInfo)),
@@ -138,10 +142,10 @@ const Department = () => {
 			return
 		}
 
-		const { DELETE_DEPARTMENT } = await _fetch({ DELETE_DEPARTMENT: [ids] })
+		const { delete_department } = await _fetch({ delete_department: [ids] })
 
-		if (DELETE_DEPARTMENT) {
-			const { success, data, errmsg } = DELETE_DEPARTMENT
+		if (delete_department) {
+			const { success, data, errmsg } = delete_department
 
 			return success
 				? (dispatch(deleteManyDepartment(ids)),
@@ -161,8 +165,6 @@ const Department = () => {
 		})
 	}
 
-	
-
 	return (
 		<AnimateWraper className="w-full">
 			<Table
@@ -173,7 +175,7 @@ const Department = () => {
 				onDeleteSelection={(ids) => deleteDepartment(ids)}
 			/>
 
-			{openDialog ? (
+			{openDialog && (
 				<TableDialog
 					open={openDialog}
 					onClose={() => setOpenDialog(!openDialog)}
@@ -181,11 +183,9 @@ const Department = () => {
 					content={<DialogContent onChange={(val) => setDepartmentInfo(val)} />}
 					onClick={() => createDepartment(departmentInfo)}
 				/>
-			) : (
-				<></>
 			)}
 
-			{openEditDialog ? (
+			{openEditDialog && (
 				<TableDialog
 					open={openEditDialog}
 					onClose={() => setOpenEditDialog(false)}
@@ -198,8 +198,6 @@ const Department = () => {
 					}
 					onClick={() => (handlerUpdateDepartment(), setOpenEditDialog(false))}
 				/>
-			) : (
-				<></>
 			)}
 		</AnimateWraper>
 	)

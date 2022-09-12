@@ -10,22 +10,15 @@ import AnimateWraper from '../../components/transition/AnimateWraper'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { updateIpAddress } from '../../store/ipAddress'
 import { IpAddressInfo } from '../../types'
-
-const columns = [
-	{
-		label: 'ip_address',
-		field: 'ip_address',
-	},
-	{ label: 'user', field: 'username' },
-	{
-		label: 'network_type',
-		field: 'network_type',
-	},
-	{ label: 'is_used', field: 'is_used' },
-]
+import { IpAddressInfoTable } from '../../tables'
 
 const IpAddress = () => {
-	const ipAddressRows = useAppSelector((state) => state.ipAddress)
+	const ipAddressRows = useAppSelector((state) =>
+		state.ipAddress.map((ip) => ({
+			...ip,
+			is_used: ip.is_used ? '已使用' : '未使用',
+		}))
+	)
 	const users = useAppSelector((state) => state.users)
 
 	const [openDialog, setOpenDialog] = useState(false)
@@ -58,14 +51,14 @@ const IpAddress = () => {
 	]
 
 	const handlerAssignIp = async () => {
-		const { ASSIGN_IP_TO_PERSON } = await _fetch({
+		const { assign_ip_to_person } = await _fetch({
 			ASSIGN_IP_TO_PERSON: curSelectRow,
 		})
 
-		if (ASSIGN_IP_TO_PERSON) {
-			const { success, data, errmsg } = ASSIGN_IP_TO_PERSON
+		if (assign_ip_to_person) {
+			const { success, data, errmsg } = assign_ip_to_person
 
-			console.log(ASSIGN_IP_TO_PERSON)
+			console.log(assign_ip_to_person)
 
 			return success
 				? (dispatch(updateIpAddress(curSelectRow as IpAddressInfo)),
@@ -82,9 +75,9 @@ const IpAddress = () => {
 
 	return (
 		<AnimateWraper className="w-full">
-			<Table columns={columns} rows={ipAddressRows} operate={operate} />
+			<IpAddressInfoTable rows={ipAddressRows} operate={operate} />
 
-			{openDialog ? (
+			{openDialog && (
 				<CustomDialog
 					title="分配IP"
 					open={openDialog}
@@ -92,8 +85,6 @@ const IpAddress = () => {
 					contents={contents}
 					onOk={handlerAssignIp}
 				></CustomDialog>
-			) : (
-				<></>
 			)}
 		</AnimateWraper>
 	)

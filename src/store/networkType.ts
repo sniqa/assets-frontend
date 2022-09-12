@@ -1,13 +1,14 @@
+import { ActionTypes } from '@mui/base'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { _fetch } from '../apis/fetch'
 import { NetworkTypeInfo } from '../types'
 
 // 获取网络类型
 const getNetworkTypes = async (): Promise<NetworkTypeInfo[]> => {
-	const { FIND_NETWORK_TYPE } = await _fetch({ FIND_NETWORK_TYPE: {} })
+	const { find_network_types } = await _fetch({ find_network_types: {} })
 
-	if (FIND_NETWORK_TYPE) {
-		const { success, data } = FIND_NETWORK_TYPE
+	if (find_network_types) {
+		const { success, data } = find_network_types
 
 		return success ? data : []
 	}
@@ -18,6 +19,8 @@ export const networkTypeSlice = createSlice({
 	name: 'networkType',
 	initialState: await getNetworkTypes(),
 	reducers: {
+		setNetworkType: (state, action: PayloadAction<NetworkTypeInfo[]>) =>
+			action.payload,
 		addNetworkType: (state, action: PayloadAction<NetworkTypeInfo>) => {
 			return [action.payload, ...state]
 		},
@@ -37,9 +40,19 @@ export const networkTypeSlice = createSlice({
 					!action.payload.some((target) => target === networkType._id)
 			)
 		},
+		deleteNetworkTypes: (state, action: PayloadAction<NetworkTypeInfo>) => {
+			return state.filter(
+				(networkType) => networkType._id != action.payload._id
+			)
+		},
 	},
 })
 
-export const { addNetworkType } = networkTypeSlice.actions
+export const {
+	setNetworkType,
+	addNetworkType,
+	deleteNetworkTypes,
+	updateNetworkType,
+} = networkTypeSlice.actions
 
 export default networkTypeSlice.reducer

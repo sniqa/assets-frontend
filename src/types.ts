@@ -78,3 +78,18 @@ export interface IpAddressInfo {
 }
 
 export type IpAddressInfoWithId = WithId & IpAddressInfo
+
+export interface DeviceInfo {
+	_id: string
+	user: string
+	location: string
+	network_type: string
+	ip_address: string
+	mac: string
+	device_model: string
+	system_version: string
+	disk_sn: string
+	remark: string
+}
+
+export type DeviceInfoWithId = WithId & DeviceInfo

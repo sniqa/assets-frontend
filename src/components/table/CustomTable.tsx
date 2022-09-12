@@ -17,9 +17,13 @@ import TableHeader from './TableHeader'
 import TablePagination from './TablePagination'
 import TableToolbar from './TableToolbar'
 
-import { CustomTableProps, SearchCondition } from './types'
+import { CustomTableProps, SearchCondition, TableColumn } from './types'
 
 const scrollbar = `scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full`
+
+const getColumnsLength = (columns: TableColumn[]) => {
+	return columns.filter((column) => column.isSelect != false).length
+}
 
 const CustomTable = (props: CustomTableProps) => {
 	const {
@@ -41,20 +45,26 @@ const CustomTable = (props: CustomTableProps) => {
 		columns.map((column) => ({ isSelect: true, ...column }))
 	)
 
+	const columnsLength = useMemo(() => getColumnsLength(columns), [columns])
+
 	//
 	const [filterData, setFilterData] = useState(rowsWithId)
 
 	// 皮肤格式设置
-	const theme = useTheme({
-		Table: `
+	const theme = useMemo(
+		() =>
+			useTheme({
+				Table: `
         --data-table-library_grid-template-columns: 48px repeat(${
-					operate ? columns.length + 1 : columns.length
+					operate ? columnsLength + 1 : columnsLength
 				}, minmax(0, 1fr));
       `,
-		BaseCell: `
+				BaseCell: `
 			text-align: center; 
 			`,
-	})
+			}),
+		[columns]
+	)
 
 	// 分页设置
 	const pagination = usePagination(
@@ -81,18 +91,8 @@ const CustomTable = (props: CustomTableProps) => {
 			onChange: (action, state) => {
 				setSelectedRowsId(state.ids)
 			},
-			
 		}
 	)
-
-	// 隐藏列
-	const [hiddenColumns, setHiddenColumns] = useState(() => {
-		const result = {}
-		columns.forEach((value) => {
-			Reflect.set(result, value.label, true)
-		})
-		return result
-	})
 
 	// 搜索
 	const search = (condition: SearchCondition) => {
@@ -192,7 +192,6 @@ const CustomTable = (props: CustomTableProps) => {
 									<TableHeader
 										select={select}
 										columns={columnsWithSelect}
-										filter={hiddenColumns}
 										operate={operate}
 									/>
 								)}
@@ -201,7 +200,6 @@ const CustomTable = (props: CustomTableProps) => {
 										select={select}
 										columns={columnsWithSelect}
 										row={node}
-										filter={hiddenColumns}
 										oprate={operate}
 									/>
 								)}

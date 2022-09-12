@@ -1,106 +1,78 @@
-import AnimateWraper from "../../components/transition/AnimateWraper"
-import { init } from "echarts"
-import { useEffect, useRef } from "react"
-
-const option = {
-	title: {
-		text: "Nightingale Chart",
-		subtext: "Fake Data",
-		left: "center",
-	},
-	// tooltip: {
-	// 	trigger: "item",
-	// 	formatter: "{a} <br/>{b} : {c} ({d}%)",
-	// },
-	// legend: {
-	// 	left: "center",
-	// 	top: "bottom",
-	// 	data: [
-	// 		"rose1",
-	// 		"rose2",
-	// 		"rose3",
-	// 		"rose4",
-	// 		"rose5",
-	// 		"rose6",
-	// 		"rose7",
-	// 		"rose8",
-	// 	],
-	// },
-	toolbox: {
-		show: true,
-		feature: {
-			mark: { show: true },
-			dataView: { show: true, readOnly: false },
-			restore: { show: true },
-			saveAsImage: { show: true },
-		},
-	},
-	series: [
-		// {
-		// 	name: "Radius Mode",
-		// 	type: "pie",
-		// 	radius: [20, 140],
-		// 	center: ["25%", "50%"],
-		// 	roseType: "radius",
-		// 	itemStyle: {
-		// 		borderRadius: 5,
-		// 	},
-		// 	label: {
-		// 		show: false,
-		// 	},
-		// 	emphasis: {
-		// 		label: {
-		// 			show: true,
-		// 		},
-		// 	},
-		// 	data: [
-		// 		{ value: 40, name: "rose 1" },
-		// 		{ value: 33, name: "rose 2" },
-		// 		{ value: 28, name: "rose 3" },
-		// 		{ value: 22, name: "rose 4" },
-		// 		{ value: 20, name: "rose 5" },
-		// 		{ value: 15, name: "rose 6" },
-		// 		{ value: 12, name: "rose 7" },
-		// 		{ value: 10, name: "rose 8" },
-		// 	],
-		// },
-		{
-			name: "Area Mode",
-			type: "pie",
-			radius: [20, 140],
-			center: ["50%", "50%"],
-			roseType: "area",
-			itemStyle: {
-				borderRadius: 5,
-			},
-			data: [
-				{ value: 30, name: "rose 1" },
-				{ value: 28, name: "rose 2" },
-				{ value: 26, name: "rose 3" },
-				{ value: 24, name: "rose 4" },
-				{ value: 22, name: "rose 5" },
-				{ value: 20, name: "rose 6" },
-				{ value: 18, name: "rose 7" },
-				{ value: 16, name: "rose 8" },
-			],
-		},
-	],
-}
+import AnimateWraper from '../../components/transition/AnimateWraper'
+import { init } from 'echarts'
+import { useEffect, useMemo, useRef } from 'react'
+import ChartContainer, {
+	EChartsOption,
+} from '../../components/charts/ChartContainer'
+import { useAppSelector } from '../../store'
 
 const DevicesSummary = () => {
-	const ref = useRef(null)
+	const devices = useAppSelector((state) => state.device)
+	const networkTypes = useAppSelector((state) => state.networkTypes)
 
-	useEffect(() => {
-		if (ref.current) {
-			const charts = init(ref.current)
+	const option = useMemo<EChartsOption>(
+		() => ({
+			title: {
+				text: '总数',
+				subtext: devices.length.toString(),
+				subtextStyle: {
+					fontSize: 40,
+				},
+				textStyle: {
+					fontSize: 50,
+				},
+				left: 'center',
+				top: 'center',
+			},
+			legend: {
+				top: 'bottom',
+			},
+			toolbox: {
+				show: true,
+				feature: {
+					mark: { show: true },
+					dataView: { show: true, readOnly: false },
+					restore: { show: true },
+					saveAsImage: { show: true },
+				},
+			},
+			series: [
+				{
+					name: 'Area Mode',
+					type: 'pie',
+					radius: [180, 240],
+					center: ['50%', '50%'],
+					itemStyle: {
+						borderRadius: 5,
+					},
+					data: networkTypes.map((networkType) => ({
+						value: devices.filter(
+							(device) => device.network_type === networkType.network_name
+						).length,
+						name: networkType.network_name,
+					})),
 
-			charts.setOption(option)
-		}
-	}, [])
+					label: {
+						show: true,
+						// position: 'inner',
+						fontSize: '30',
+						formatter: (arg) => {
+							return arg.name + ` - ` + arg.value
+						},
+					},
+				},
+			],
+		}),
+		[devices]
+	)
 
 	return (
-		<AnimateWraper className="w-full">
-			<div className="w-full h-38rem" ref={ref}></div>
+		<AnimateWraper className="w-full h-full">
+			<ChartContainer
+				title="设备"
+				options={option}
+				className={`w-full h-full`}
+			/>
 		</AnimateWraper>
 	)
 }

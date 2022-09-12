@@ -1,11 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { ReactNode, FC } from 'react'
 
-interface AnimateWraperProps {
-	children: JSX.Element | Array<JSX.Element> | string
+type AnimateWraperProps = {
+	children?: ReactNode
 	className?: string
 }
 
-const AnimateWraper = ({ children, className }: AnimateWraperProps) => {
+const AnimateWraper: FC<AnimateWraperProps> = ({ children, className }) => {
 	return (
 		<AnimatePresence>
 			<motion.div

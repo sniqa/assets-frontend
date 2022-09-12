@@ -10,30 +10,27 @@ import { useEffect, useState } from 'react'
 import CustomDialogContent, {
 	CustomDialogContentProps,
 } from './CustomDialogContent'
+import { ReactNode } from 'react'
 
 export type { CustomDialogContentProps }
 
-interface CustomDialogProps {
+interface DialogWraperProps {
 	title: string
 	open: boolean
 	onClose: () => void
-	contents: CustomDialogContentProps[]
-	onOk?: (val: any) => void
+	onOk?: () => void
+	children?: ReactNode
 }
 
-const CustomDialog = (props: CustomDialogProps) => {
-	const { title, open, onClose, onOk = () => {}, contents } = props
+const DialogWraper = (props: DialogWraperProps) => {
+	const { title, open, onClose, onOk = () => {}, children } = props
 
 	return (
 		<Dialog open={open} onClose={onClose}>
 			<DialogTitle>{title}</DialogTitle>
 
 			<DialogContent className={`w-32rem p-4 flex flex-wrap`}>
-				{contents.map((content) => (
-					<div className="w-1/2 p-2" key={content.label}>
-						<CustomDialogContent {...content} />
-					</div>
-				))}
+				{children}
 			</DialogContent>
 
 			<DialogActions>
@@ -48,4 +45,4 @@ const CustomDialog = (props: CustomDialogProps) => {
 	)
 }
 
-export default CustomDialog
+export default DialogWraper

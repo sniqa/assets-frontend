@@ -1,13 +1,13 @@
-import { Dialog, Tooltip } from "@mui/material"
-import MaterialCheckbox from "@mui/material/Checkbox"
-import { Cell, Row } from "@table-library/react-table-library/table"
-import { Fragment, useState } from "react"
-import { TableBodyProps } from "./types"
+import { Dialog, Tooltip } from '@mui/material'
+import MaterialCheckbox from '@mui/material/Checkbox'
+import { Cell, Row } from '@table-library/react-table-library/table'
+import { Fragment, useState } from 'react'
+import { TableBodyProps } from './types'
 
 const getValue = (val: any) => {
-	if (val === 0) return "0"
+	if (val === 0) return '0'
 
-	return val || ""
+	return val || ''
 }
 
 interface IdData {
@@ -21,7 +21,7 @@ const removeId = (data: IdData) => {
 }
 
 const TableBody = (props: TableBodyProps) => {
-	const { select, row, columns, filter = {}, oprate } = props
+	const { select, row, columns, oprate } = props
 
 	return (
 		<Fragment>
@@ -29,14 +29,14 @@ const TableBody = (props: TableBodyProps) => {
 				<Row item={row}>
 					<Cell stiff>
 						<MaterialCheckbox
-							inputProps={{ "aria-label": "select item" }}
+							inputProps={{ 'aria-label': 'select item' }}
 							size="small"
 							checked={select.state.ids.includes(row.id)}
 							onChange={() => select.fns.onToggleById(row.id)}
 						/>
 					</Cell>
 					{columns.map((column) => {
-						const value = getValue(row[column.field])
+						const value = getValue(row[column.field]) || ''
 
 						return (
 							<Cell key={column.label} hide={!column.isSelect}>
