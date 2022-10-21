@@ -10,7 +10,11 @@ import { _fetch } from '../../apis/fetch'
 import { notice, confirm } from '../../apis/mitt'
 import AddDialog, { AddDialogContent } from '../../components/dialogs/AddDialog'
 import { useAppDispatch, useAppSelector } from '../../store'
-import { addNetworkType, deleteNetworkTypes } from '../../store/networkType'
+import {
+	addNetworkType,
+	deleteNetworkTypes,
+	setNetworkType,
+} from '../../store/networkType'
 import { NetworkTypeInfo } from '../../types'
 import { NetworkTypeInfoTable } from '../../tables'
 import { Button } from '@mui/material'

@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { _fetch } from '../apis/fetch'
 import type { DeviceBaseInfo } from '../types'
 
-const getDeviceBases = async (): Promise<Array<DeviceBaseInfo>> => {
+const getDeviceBases = async (): Promise<DeviceBaseInfo[]> => {
 	const { find_device_base } = await _fetch({ find_device_base: {} })
 
 	if (find_device_base) {
-		const { success, data } = find_device_base
+		const { success, data, errmsg } = find_device_base
 		return success ? data : []
 	}
 
@@ -15,8 +15,10 @@ const getDeviceBases = async (): Promise<Array<DeviceBaseInfo>> => {
 
 export const deviceBaseSlice = createSlice({
 	name: 'deviceBase',
-	initialState: (await getDeviceBases()) || [],
+	initialState: await getDeviceBases(),
 	reducers: {
+		setDeviceBases: (state, action: PayloadAction<DeviceBaseInfo[]>) =>
+			action.payload,
 		addDeviceBase: (state, action: PayloadAction<DeviceBaseInfo>) => {
 			return [action.payload, ...state]
 		},
@@ -39,7 +41,11 @@ export const deviceBaseSlice = createSlice({
 	},
 })
 
-export const { addDeviceBase, updateDeviceBase, deleteManyDeviceBase } =
-	deviceBaseSlice.actions
+export const {
+	setDeviceBases,
+	addDeviceBase,
+	updateDeviceBase,
+	deleteManyDeviceBase,
+} = deviceBaseSlice.actions
 
 export default deviceBaseSlice.reducer

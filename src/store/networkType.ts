@@ -1,14 +1,14 @@
-import { ActionTypes } from '@mui/base'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { _fetch } from '../apis/fetch'
 import { NetworkTypeInfo } from '../types'
 
-// 获取网络类型
+const initialState: NetworkTypeInfo[] = []
+
 const getNetworkTypes = async (): Promise<NetworkTypeInfo[]> => {
 	const { find_network_types } = await _fetch({ find_network_types: {} })
 
 	if (find_network_types) {
-		const { success, data } = find_network_types
+		const { success, data, errmsg } = find_network_types
 
 		return success ? data : []
 	}

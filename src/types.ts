@@ -1,3 +1,5 @@
+import { PeripheralsTable } from './tables/UserInfoTable'
+import { ReactNode } from 'react'
 import { AlertColor, SnackbarCloseReason } from '@mui/material'
 
 export interface NoticebarStatus {
@@ -11,7 +13,8 @@ export interface NoticebarStatus {
 
 export interface ConfirmbarState {
 	title: string
-	message: string
+	message?: string
+	content?: ReactNode
 }
 
 interface WithId {
@@ -87,6 +90,7 @@ export interface DeviceInfo {
 	ip_address: string
 	mac: string
 	device_model: string
+	device_category: 'computer' | 'peripheral' | 'netDevice'
 	system_version: string
 	disk_sn: string
 	remark: string

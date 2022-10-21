@@ -100,3 +100,41 @@ const deviceColumns: TableColumn[] = [
 export const DeviceInfoTable = (props: Omit<CustomTableProps, 'columns'>) => (
 	<Table {...props} columns={deviceColumns} />
 )
+
+const PeripheralColumns: TableColumn[] = [
+	{
+		label: '使用人',
+		field: 'user',
+	},
+	{ label: '物理位置', field: 'location' },
+	{
+		label: '网络类型',
+		field: 'network_type',
+	},
+	{ label: 'Ip地址', field: 'ip_address' },
+	{ label: 'MAC', field: 'mac' },
+	{ label: '设备型号', field: 'device_model' },
+	{ label: '备注', field: 'remark' },
+]
+export const PeripheralsTable = (props: Omit<CustomTableProps, 'columns'>) => (
+	<Table {...props} columns={PeripheralColumns} />
+)
+
+const NetDeviceColumns: TableColumn[] = [
+	{
+		label: '使用人',
+		field: 'user',
+	},
+	{ label: '物理位置', field: 'location' },
+	{
+		label: '网络类型',
+		field: 'network_type',
+	},
+	{ label: 'Ip地址', field: 'ip_address' },
+	{ label: 'MAC', field: 'mac' },
+	{ label: '设备型号', field: 'device_model' },
+	{ label: '备注', field: 'remark' },
+]
+export const NetDevicesInfoTable = (
+	props: Omit<CustomTableProps, 'columns'>
+) => <Table {...props} columns={NetDeviceColumns} />

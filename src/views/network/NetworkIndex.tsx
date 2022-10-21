@@ -6,11 +6,16 @@ const NetworkIndex = () => {
 	return (
 		<AnimateWraper className="w-full">
 			<NavigateItem
+				title={'网络类型汇总'}
+				detail={'饼状图汇总'}
+				to={RouterPath.NETWORK_TYPE_SUMMARY}
+			/>
+			<NavigateItem
 				title={'网络类型'}
 				detail={'ip, mac的详细资料'}
 				to={RouterPath.NETWORK_TYPE}
 			/>
-			 <NavigateItem
+			<NavigateItem
 				title={'ip地址'}
 				detail={'交换机,路由器,光电转换器的清单资料'}
 				to={RouterPath.IP_ADDRESS}

@@ -2,12 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { _fetch } from '../apis/fetch'
 import { IpAddressInfo } from '../types'
 
-// 获取ip
+const initialState: IpAddressInfo[] = []
+
 const getIpAddress = async (): Promise<IpAddressInfo[]> => {
 	const { find_ips } = await _fetch({ find_ips: {} })
 
 	if (find_ips) {
-		const { success, data } = find_ips
+		const { success, data, errmsg } = find_ips
 
 		return success ? data : []
 	}

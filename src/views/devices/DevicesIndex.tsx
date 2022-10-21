@@ -25,11 +25,11 @@ const Devices = () => {
 				detail={'打印机,扫描仪,复印机的资料'}
 				to={RouterPath.PERIPHERALS}
 			/>
-			<NavigateItem
+			{/* <NavigateItem
 				title={'其他'}
 				detail={'包括一些碎纸机等其他设备的资料'}
 				to={RouterPath.OTHER_DEVICES}
-			/>
+			/> */}
 			<NavigateItem
 				title={'设备基础资料'}
 				detail={'设备的一些公共基础资料库'}

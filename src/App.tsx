@@ -24,6 +24,9 @@ const UserInfo = lazy(() => import('./views/user/UserInfo'))
 const Department = lazy(() => import('./views/user/Department'))
 
 const Network = lazy(() => import('./views/network/NetworkIndex'))
+const NetworkTypeSummary = lazy(
+	() => import('./views/network/NetworkTypeSummary')
+)
 const NetworkType = lazy(() => import('./views/network/NetworkType'))
 const IpAddress = lazy(() => import('./views/network/IpAddress'))
 
@@ -37,6 +40,10 @@ const DevicesBase = lazy(() => import('./views/devices/DevicesBase'))
 
 const MessageIndex = lazy(() => import('./views/message/MessageIndex'))
 const Logs = lazy(() => import('./views/message/Logs'))
+
+const DocumentsIndex = lazy(() => import('./views/documents/DocumentsIndex'))
+
+const GraphsIndex = lazy(() => import('./views/graphs/GraphsIndex'))
 
 const SettingsIndex = lazy(() => import('./views/settings/SettingsIndex'))
 
@@ -65,6 +72,7 @@ const App = () => {
 							/>
 							{/* 主页 */}
 							<Route path={RouterPath.HOME} element={<Home />} />
+
 							{/* 用户 */}
 							<Route
 								path={RouterPath.USER}
@@ -74,6 +82,12 @@ const App = () => {
 								<Route path={RouterPath.USER_INFO} element={<UserInfo />} />
 								<Route path={RouterPath.DEPARTMENT} element={<Department />} />
 							</Route>
+
+							{/*文档 */}
+							<Route path={RouterPath.DOCUMENTS}>
+								<Route index element={<DocumentsIndex />} />
+							</Route>
+
 							{/* 设备 */}
 							<Route
 								path={RouterPath.DEVICES}
@@ -105,12 +119,18 @@ const App = () => {
 									element={<DevicesBase />}
 								></Route>
 							</Route>
+
 							{/* 网络 */}
 							<Route
 								path={RouterPath.NETWORK}
 								element={<SuspenseLoading element={<Outlet />} />}
 							>
 								<Route index element={<Network />}></Route>
+								<Route
+									path={RouterPath.NETWORK_TYPE_SUMMARY}
+									element={<NetworkTypeSummary />}
+								/>
+
 								<Route
 									path={RouterPath.NETWORK_TYPE}
 									element={<NetworkType />}
@@ -120,6 +140,12 @@ const App = () => {
 									element={<IpAddress />}
 								></Route>
 							</Route>
+
+							{/* 图示 */}
+							<Route path={RouterPath.GRAPHS} element={<Outlet />}>
+								<Route index element={<GraphsIndex />} />
+							</Route>
+
 							{/* 消息 */}
 							<Route
 								path={RouterPath.MESSAGE}

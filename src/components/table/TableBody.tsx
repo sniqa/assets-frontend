@@ -36,7 +36,11 @@ const TableBody = (props: TableBodyProps) => {
 						/>
 					</Cell>
 					{columns.map((column) => {
-						const value = getValue(row[column.field]) || ''
+						let value = getValue(row[column.field]) || ''
+
+						if (Array.isArray(value)) {
+							value = value.join(` ; `)
+						}
 
 						return (
 							<Cell key={column.label} hide={!column.isSelect}>

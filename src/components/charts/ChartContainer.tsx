@@ -49,7 +49,7 @@ import * as echarts from 'echarts'
 
 export type EChartsOption = echarts.EChartsOption
 
-interface ChartContainerProps {
+export interface ChartContainerProps {
 	options: EChartsOption
 	title?: string
 	className?: string

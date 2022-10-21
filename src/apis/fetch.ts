@@ -1,8 +1,8 @@
 import { notice } from './mitt'
 
-const url = 'http://localhost'
+const url = `http://${window.location.hostname}`
 
-const port = 8081
+const port = 8088
 const path = '/phl'
 
 const headers = new Headers()

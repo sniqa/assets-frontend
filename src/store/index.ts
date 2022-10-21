@@ -16,7 +16,7 @@ const store = configureStore({
 		confirm: confirmReducer,
 		department: departmentReducer,
 		deviceBase: deviceBaseReducer,
-		device: deviceReducer,
+		devices: deviceReducer,
 		ipAddress: ipAddressReducer,
 	},
 })

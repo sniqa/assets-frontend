@@ -17,6 +17,7 @@ import {
 	addDeviceBase,
 	updateDeviceBase,
 	deleteManyDeviceBase,
+	setDeviceBases,
 } from '../../store/deviceBase'
 import type { DeviceBaseInfo } from '../../types'
 

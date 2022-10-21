@@ -5,6 +5,7 @@ a {
 /* 导航项 */
 .nav-item-selected {
 	background-color: #e9eef3;
+	color: #1f87e2;
 	position: relative;
 }
 .nav-item-selected::before {
@@ -61,14 +62,13 @@ a {
 	--scrollbar-track: #d1d5db;
 	--scrollbar-thumb: #374151;
 	--scrollbar-track: initial;
-    --scrollbar-thumb: initial;
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-    overflow: overlay;
-    scrollbar-width: thin;
+	--scrollbar-thumb: initial;
+	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+	overflow: overlay;
+	scrollbar-width: thin;
 }
 
 input:focus {
-	
 	outline: none;
 }
 

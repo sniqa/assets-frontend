@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { _fetch } from '../apis/fetch'
 import type { DepartmentInfo } from '../types'
 
-const getDepartments = async (): Promise<Array<DepartmentInfo>> => {
+const getDepartments = async (): Promise<DepartmentInfo[]> => {
 	const { find_departments } = await _fetch({ find_departments: {} })
 
 	if (find_departments) {
@@ -16,8 +16,10 @@ const getDepartments = async (): Promise<Array<DepartmentInfo>> => {
 
 const departmentSlice = createSlice({
 	name: 'department',
-	initialState: (await getDepartments()) || [],
+	initialState: await getDepartments(),
 	reducers: {
+		setDepartments: (state, action: PayloadAction<DepartmentInfo[]>) =>
+			action.payload,
 		addDepartment: (state, action: PayloadAction<DepartmentInfo>) => {
 			return [action.payload, ...state]
 		},
@@ -40,7 +42,11 @@ const departmentSlice = createSlice({
 	},
 })
 
-export const { addDepartment, updateDepartment, deleteManyDepartment } =
-	departmentSlice.actions
+export const {
+	setDepartments,
+	addDepartment,
+	updateDepartment,
+	deleteManyDepartment,
+} = departmentSlice.actions
 
 export default departmentSlice.reducer

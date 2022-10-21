@@ -172,7 +172,7 @@ const TableToolbar = (props: TableToolbarProps) => {
 					}}
 				/>
 				<OutlinedInput
-					placeholder="搜索"
+					placeholder="搜索:并且, 或者; "
 					sx={{ height: '2rem', fontSize: '0.8rem' }}
 					onChange={(e) => {
 						const value = e.target.value

@@ -3,6 +3,7 @@ import { Breadcrumbs, Typography } from '@mui/material'
 import { Fragment } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import SuspenseLoading from '../transition/SuspenseLoading'
+import { getRouterMap } from '../../router/path'
 
 const scrollbar = `scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full`
 
@@ -42,11 +43,11 @@ const Main = () => {
 								key={key}
 								className={`text-blue-600`}
 							>
-								{path}
+								{getRouterMap(path)}
 							</Link>
 						) : (
 							<Typography className={`text-gray-400`} key={key}>
-								{path}
+								{getRouterMap(path)}
 							</Typography>
 						)
 					)}

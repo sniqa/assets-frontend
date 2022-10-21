@@ -8,7 +8,7 @@ import CustomDialog, {
 import Table, { Operate, TableToolbarExtensions } from '../../components/table'
 import AnimateWraper from '../../components/transition/AnimateWraper'
 import { useAppDispatch, useAppSelector } from '../../store'
-import { updateIpAddress } from '../../store/ipAddress'
+import { setIpAddress, updateIpAddress } from '../../store/ipAddress'
 import { IpAddressInfo } from '../../types'
 import { IpAddressInfoTable } from '../../tables'
 
@@ -27,18 +27,18 @@ const IpAddress = () => {
 
 	const dispatch = useAppDispatch()
 
-	// 操作栏
-	const operate = useMemo<Operate>(
-		() => ({
-			header: '操作',
-			cell: (value) => (
-				<Button
-					onClick={() => (setCurSelectRow(value), setOpenDialog(true))}
-				>{`分配`}</Button>
-			),
-		}),
-		[]
-	)
+	// // 操作栏
+	// const operate = useMemo<Operate>(
+	// 	() => ({
+	// 		header: '操作',
+	// 		cell: (value) => (
+	// 			<Button
+	// 				onClick={() => (setCurSelectRow(value), setOpenDialog(true))}
+	// 			>{`分配`}</Button>
+	// 		),
+	// 	}),
+	// 	[]
+	// )
 
 	// 分配ip
 	const contents: CustomDialogContentProps[] = [
@@ -75,7 +75,7 @@ const IpAddress = () => {
 
 	return (
 		<AnimateWraper className="w-full">
-			<IpAddressInfoTable rows={ipAddressRows} operate={operate} />
+			<IpAddressInfoTable rows={ipAddressRows} />
 
 			{openDialog && (
 				<CustomDialog

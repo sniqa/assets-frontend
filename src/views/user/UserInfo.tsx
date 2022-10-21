@@ -1,7 +1,7 @@
-import { Button } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { Button, TextField } from '@mui/material'
+import { useEffect, useMemo, useState } from 'react'
 import { _fetch } from '../../apis/fetch'
-import { notice } from '../../apis/mitt'
+import { notice, confirm } from '../../apis/mitt'
 import AddDialog from '../../components/dialogs/AddDialog'
 import CustomDialog, {
 	CustomDialogContentProps,
@@ -12,9 +12,13 @@ import Table, { TableToolbarExtensions } from '../../components/table'
 import { Operate, TableColumn } from '../../components/table/types'
 import AnimateWraper from '../../components/transition/AnimateWraper'
 import { useAppDispatch, useAppSelector } from '../../store'
-import { addUser, deleteManyUser, updateUser } from '../../store/users'
+import { addUser, deleteUser, setUsers, updateUser } from '../../store/users'
 import { UserInfo } from '../../types'
 import { UserInfoTable } from '../../tables'
+import { setIpAddress } from '../../store/ipAddress'
+import { setDevices } from '../../store/device'
+import DialogWraper from '../../components/dialogs/DialogWraper'
+import CustomSelect from '../../components/dialogs/CustomSelect'
 const columns: TableColumn[] = [
 	{ label: '用户名称', field: 'username' },
 	{ label: '昵称', field: 'nickname' },
@@ -51,8 +55,6 @@ const User = () => {
 		if (create_user) {
 			const { success, data, errmsg } = create_user
 
-			console.log({ ...data, ...userInfo })
-
 			success
 				? (dispatch(addUser({ ...data, ...userInfo })),
 				  notice({ status: 'success', message: '创建用户成功' }),
@@ -62,17 +64,40 @@ const User = () => {
 	}
 
 	// 删除用户
-	const handleDeleteUser = async (ids: (string | number)[]) => {
-		const { delete_user } = await _fetch({ delete_user: [ids] })
+	const handleDeleteUser = async (row: UserInfo) => {
+		console.log('row', row)
+
+		const result = await confirm({
+			title: '提示',
+			message: `删除用户会删除该用户名下的所有资料`,
+		})
+
+		if (!result) {
+			return
+		}
+
+		const [{ delete_user }, { find_ips }, { find_devices }] = await _fetch([
+			{ delete_user: row },
+			{ find_ips: {} },
+			{ find_devices: {} },
+		])
 
 		if (delete_user) {
-			const { success, data, errmsg } = delete_user
+			const { data, success, errmsg } = delete_user
+
+			if (find_ips) dispatch(setIpAddress(find_ips.data))
+
+			if (find_devices) dispatch(setDevices(find_devices.data))
 
 			return success
-				? (dispatch(deleteManyUser(ids)),
-				  notice({ status: 'success', message: '删除用户成功' }))
-				: notice({ status: 'error', message: errmsg })
+				? (dispatch(deleteUser(row)),
+				  notice({ status: 'success', message: `删除成功` }))
+				: notice({
+						status: 'error',
+						message: errmsg,
+				  })
 		}
+
 		return notice({
 			status: 'error',
 			message: '删除失败',
@@ -81,37 +106,69 @@ const User = () => {
 
 	// 更新用户信息
 	const handleModifyUser = async (userInfo: UserInfo) => {
-		const { modify_user } = await _fetch({ modify_user: userInfo })
+		const [{ modify_user }, { find_ips }, { find_devices }] = await _fetch([
+			{ modify_user: userInfo },
+			{ find_ips: {} },
+			{ find_devices: {} },
+		])
 
-		if (modify_user.success) {
-			dispatch(updateUser(userInfo))
-			setOpenEditDialog(false)
-			return notice({
-				status: 'success',
-				message: '修改成功',
-			})
+		if (modify_user) {
+			const { success, data, errmsg } = modify_user
+
+			if (find_ips) {
+				dispatch(setIpAddress(find_ips.data))
+			}
+			if (find_devices) {
+				dispatch(setDevices(find_devices.data))
+			}
+
+			return success
+				? (dispatch(updateUser(userInfo)),
+				  setOpenEditDialog(false),
+				  notice({
+						status: 'success',
+						message: '修改成功',
+				  }))
+				: notice({
+						status: 'error',
+						message: errmsg,
+				  })
 		}
 
-		notice({
+		return notice({
 			status: 'error',
-			message: modify_user.errmsg,
+			message: '修改用户失败',
 		})
 	}
 
 	// 编辑时的旧数据
-	const [editData, setEditData] = useState({})
+	const [editData, setEditData] = useState<UserInfo>({
+		_id: '',
+		department: '',
+		location: '',
+		username: '',
+	})
 
 	// 操作栏
 	const operate = useMemo<Operate>(
 		() => ({
 			header: '操作',
 			cell: (value) => (
-				<Button
-					onClick={() => {
-						setEditData(value)
-						setOpenEditDialog(true)
-					}}
-				>{`编辑`}</Button>
+				<>
+					<Button
+						size="small"
+						onClick={() => {
+							setEditData(value)
+							setOpenEditDialog(true)
+						}}
+					>{`编辑`}</Button>
+					<Button
+						size="small"
+						onClick={() => {
+							handleDeleteUser(value)
+						}}
+					>{`删除`}</Button>
+				</>
 			),
 		}),
 		[]
@@ -143,10 +200,6 @@ const User = () => {
 			onChange: (val) => setUserInfo((old) => ({ ...old, location: val })),
 		},
 	]
-	const editContent: CustomDialogContentProps[] = useMemo(
-		() => [],
-		[departments]
-	)
 
 	return (
 		<AnimateWraper className="w-full">
@@ -155,7 +208,7 @@ const User = () => {
 				rows={rows}
 				extensions={extensions}
 				operate={operate}
-				onDeleteSelection={(data) => handleDeleteUser(data)}
+				// onDeleteSelection={(data) => handleDeleteUsers(data)}
 			/>
 
 			{openAddDialog && (
@@ -169,12 +222,39 @@ const User = () => {
 			)}
 
 			{openEditDialog && (
-				<CustomDialog
+				<DialogWraper
 					title={`编辑用户`}
 					open={openEditDialog}
 					onClose={() => setOpenEditDialog(false)}
-					contents={editContent}
-				/>
+					onOk={() => handleModifyUser(editData)}
+				>
+					<div className="w-1/2 p-2">
+						<TextField
+							label={`用户名称`}
+							size="small"
+							value={editData.username}
+							onChange={(e) =>
+								setEditData({ ...editData, username: e.target.value })
+							}
+						/>
+					</div>
+
+					<CustomSelect
+						label={`部门`}
+						value={editData.department}
+						options={departments.map(
+							(department) => department.department_name
+						)}
+						onChange={(val) => setEditData({ ...editData, department: val })}
+					/>
+
+					<CustomSelect
+						label={`办公室`}
+						value={editData.location}
+						options={departments.flatMap((department) => department.locations)}
+						onChange={(val) => setEditData({ ...editData, location: val })}
+					/>
+				</DialogWraper>
 			)}
 		</AnimateWraper>
 	)

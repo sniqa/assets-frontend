@@ -27,6 +27,7 @@ import { useAppDispatch, useAppSelector } from '../../store'
 import {
 	addDepartment,
 	deleteManyDepartment,
+	setDepartments,
 	updateDepartment,
 } from '../../store/department'
 
@@ -282,9 +283,10 @@ const DynamicInput = (props: DynamicInputProps) => {
 						label={label + (index + 1)}
 						value={inputVals[index]}
 						onChange={(e) => {
-							setInputVals((old) => {
-								old[index] = e.target.value
-								return [...old]
+							setInputVals((olds) => {
+								return olds.map((old, idx) =>
+									idx === index ? e.target.value : old
+								)
 							})
 						}}
 					/>
@@ -305,13 +307,11 @@ const DynamicInput = (props: DynamicInputProps) => {
 						<Tooltip title="删除" placement="right">
 							<IconButton
 								onClick={() => {
-									setInputKeys((old) => {
-										old.splice(index, 1)
-										return [...old]
+									setInputKeys((olds) => {
+										return olds.filter((old, idx) => idx != index)
 									})
-									setInputVals((old) => {
-										old.splice(index, 1)
-										return [...old]
+									setInputVals((olds) => {
+										return olds.filter((old, idx) => idx != index)
 									})
 								}}
 								size="small"

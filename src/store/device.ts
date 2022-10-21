@@ -4,16 +4,17 @@ import { DeviceInfo } from '../types'
 
 const getDevices = async (): Promise<DeviceInfo[]> => {
 	try {
-		const { find_devices } = await _fetch({ find_devices: {} })
+		const { find_devices } = await _fetch({
+			find_devices: {},
+		})
 		if (find_devices) {
-			const { success, data } = find_devices
+			const { success, data, errmsg } = find_devices
 
 			return success ? data : []
 		}
 	} catch {
 		return []
 	}
-
 	return []
 }
 

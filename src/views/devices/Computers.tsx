@@ -18,10 +18,28 @@ import { DeviceInfoTable } from '../../tables'
 import CustomSelect from '../../components/dialogs/CustomSelect'
 import { _fetch } from '../../apis/fetch'
 import { notice, confirm } from '../../apis/mitt'
-import { addDevice, deleteDevice, updateDevice } from '../../store/device'
+import {
+	addDevice,
+	deleteDevice,
+	setDevices,
+	updateDevice,
+} from '../../store/device'
 import { setIpAddress, updateIpAddress } from '../../store/ipAddress'
 import { setNetworkType } from '../../store/networkType'
 import { DeviceInfo } from '../../types'
+
+const initialDeviceInfo: Omit<DeviceInfo, '_id'> = {
+	user: '',
+	location: '',
+	network_type: '',
+	ip_address: '',
+	mac: '',
+	device_model: '',
+	device_category: 'computer',
+	system_version: '',
+	disk_sn: '',
+	remark: '',
+}
 
 const Computer = () => {
 	const users = useAppSelector((state) => state.users)
@@ -29,7 +47,9 @@ const Computer = () => {
 	const networkTypes = useAppSelector((state) => state.networkTypes)
 	const ipAddress = useAppSelector((state) => state.ipAddress)
 	const deviceBase = useAppSelector((state) => state.deviceBase)
-	const device = useAppSelector((state) => state.device)
+	const device = useAppSelector((state) =>
+		state.devices.filter((device) => device.device_category === 'computer')
+	)
 
 	const dispatch = useAppDispatch()
 
@@ -38,30 +58,12 @@ const Computer = () => {
 	const [openAddDialog, setOpenAddDialog] = useState(false)
 	const [openEditDialog, setOpenEditDialog] = useState(false)
 
-	const [deviceInfo, setDeviceInfo] = useState({
-		user: '',
-		location: '',
-		network_type: '',
-		ip_address: '',
-		mac: '',
-		device_model: '',
-		system_version: '',
-		disk_sn: '',
-		remark: '',
-	})
+	const [deviceInfo, setDeviceInfo] = useState(initialDeviceInfo)
 
 	// 编辑时用来记录数据
 	const [editDeviceInfo, setEditDeviceInfo] = useState({
 		_id: '',
-		user: '',
-		location: '',
-		network_type: '',
-		ip_address: '',
-		mac: '',
-		device_model: '',
-		system_version: '',
-		disk_sn: '',
-		remark: '',
+		...initialDeviceInfo,
 	})
 	// 编辑时记录原始网络类型和ip
 	const [originDevice, setOriginDevice] = useState({
@@ -96,6 +98,7 @@ const Computer = () => {
 			return success
 				? (dispatch(addDevice({ ...data, ...deviceInfo })),
 				  notice({ status: 'success', message: '创建设备成功!' }),
+				  setDeviceInfo(initialDeviceInfo),
 				  setOpenAddDialog(false))
 				: notice({ status: 'error', message: errmsg })
 		}

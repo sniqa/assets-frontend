@@ -1,6 +1,7 @@
 import { ArrowBack } from '@mui/icons-material'
 import { IconButton, Typography } from '@mui/material'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { getRouterMap } from '../../router/path'
 
 const Header = () => {
 	const { pathname } = useLocation()
@@ -14,7 +15,7 @@ const Header = () => {
 			</IconButton>
 
 			<Typography className="pl-0.8rem" component={`h3`}>
-				{pathname}
+				{getRouterMap(pathname.split('/').pop() || '')}
 			</Typography>
 		</div>
 	)

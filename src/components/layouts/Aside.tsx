@@ -4,6 +4,9 @@ import PersonIcon from '@mui/icons-material/Person'
 import SettingsIcon from '@mui/icons-material/Settings'
 import ZoomInMapIcon from '@mui/icons-material/ZoomInMap'
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap'
+import SourceIcon from '@mui/icons-material/Source'
+import CollectionsIcon from '@mui/icons-material/Collections'
+import ArticleIcon from '@mui/icons-material/Article'
 import { Badge, IconButton, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 import { Link, useMatch } from 'react-router-dom'
@@ -38,9 +41,10 @@ const LeftSidebarItem = (props: LeftSidebarItemProps) => {
 const navs: Array<LeftSidebarItemProps> = [
 	{ icon: <HomeIcon />, title: '主页', to: RouterPath.HOME },
 	{ icon: <PersonIcon />, title: '用户', to: RouterPath.USER },
-	// { icon: <ArticleIcon />, title: '文档', to: RouterPath.DOCUMENT },
+	{ icon: <ArticleIcon />, title: '文档', to: RouterPath.DOCUMENTS },
 	{ icon: <SignalWifi2BarIcon />, title: '网络', to: RouterPath.NETWORK },
 	{ icon: <DesktopWindowsIcon />, title: '设备', to: RouterPath.DEVICES },
+	{ icon: <CollectionsIcon />, title: '图示', to: RouterPath.GRAPHS },
 	{
 		icon: (
 			<Badge badgeContent={0} color={`primary`}>
@@ -60,7 +64,7 @@ const settings: LeftSidebarItemProps = {
 }
 
 const LeftSidebarNav = () => {
-	const [shrink, setShrink] = useState(false)
+	const [shrink, setShrink] = useState(true)
 
 	return (
 		<div

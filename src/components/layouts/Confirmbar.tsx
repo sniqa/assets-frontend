@@ -19,6 +19,7 @@ const Confirmbar = () => {
 	const [confirm, setConfirm] = useState<ConfirmbarState>({
 		title: '',
 		message: '',
+		content: null,
 	})
 
 	emitter.on('confirm', (state) => {
@@ -31,7 +32,11 @@ const Confirmbar = () => {
 			<DialogTitle color={`primary`}>{confirm.title}</DialogTitle>
 
 			<DialogContent>
-				<div className="min-w-16rem">{confirm.message}</div>
+				{confirm.message && (
+					<div className="min-w-16rem">{confirm.message}</div>
+				)}
+
+				{confirm.content && confirm.content}
 			</DialogContent>
 
 			<DialogActions>
