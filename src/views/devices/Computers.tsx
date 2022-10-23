@@ -262,7 +262,7 @@ const Computer = () => {
 						label="网络类型"
 						value={deviceInfo.network_type}
 						options={networkTypes.map(
-							(networkType) => networkType.network_name
+							(networkType) => networkType.network_type_name
 						)}
 						onChange={(val) => {
 							setCurNetworkTypeIps(
@@ -361,7 +361,7 @@ const Computer = () => {
 						label="网络类型"
 						value={editDeviceInfo.network_type}
 						options={networkTypes.map(
-							(networkType) => networkType.network_name
+							(networkType) => networkType.network_type_name
 						)}
 						onChange={(val) => {
 							setEditDeviceInfo({

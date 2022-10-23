@@ -54,8 +54,8 @@ const getNetworkDeviceNumber = (
 ) => {
 	return networkTypes.map((networkType) => ({
 		value: devices
-			.filter((device) => device.network_type === networkType.network_name)
+			.filter((device) => device.network_type === networkType.network_type_name)
 			.length.toString(),
-		name: networkType.network_name,
+		name: networkType.network_type_name,
 	}))
 }

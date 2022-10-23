@@ -37,6 +37,7 @@ const NetDevices = lazy(() => import('./views/devices/NetDevices'))
 const Peripherals = lazy(() => import('./views/devices/Peripherals'))
 const OtherDevices = lazy(() => import('./views/devices/Other'))
 const DevicesBase = lazy(() => import('./views/devices/DevicesBase'))
+const UsbKey = lazy(() => import('./views/devices/UsbKey'))
 
 const MessageIndex = lazy(() => import('./views/message/MessageIndex'))
 const Logs = lazy(() => import('./views/message/Logs'))
@@ -114,6 +115,7 @@ const App = () => {
 									path={RouterPath.OTHER_DEVICES}
 									element={<OtherDevices />}
 								></Route>
+								<Route path={RouterPath.USB_KEY} element={<UsbKey />}></Route>
 								<Route
 									path={RouterPath.DEVICE_BASE}
 									element={<DevicesBase />}

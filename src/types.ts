@@ -37,7 +37,7 @@ export type UserInfoWithId = WithId & UserInfo
 // network type
 export interface NetworkTypeInfo {
 	_id: string
-	network_name: string
+	network_type_name: string
 	ip_address_start: string
 	ip_address_end: string
 	netmask: string

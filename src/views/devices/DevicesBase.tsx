@@ -71,6 +71,8 @@ const DevicesBase = () => {
 
 	// 更新
 	const updateDeviceBases = async (val: TableRow<DeviceBaseInfo>) => {
+		console.log(val)
+
 		const { modify_device_base } = await _fetch({ modify_device_base: val })
 
 		if (modify_device_base) {

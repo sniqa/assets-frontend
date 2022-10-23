@@ -27,6 +27,7 @@ export enum RouterPath {
 	PERIPHERALS = 'peripherals',
 	OTHER_DEVICES = 'other',
 	DEVICE_BASE = 'devices_base',
+	USB_KEY = 'usb_key',
 }
 
 const routerMap = {
@@ -51,6 +52,7 @@ const routerMap = {
 	net_devices: '网络设备',
 	peripherals: '外设',
 	devices_base: '设备基础资料',
+	usb_key: '数字证书',
 }
 
 export const getRouterMap = (key: string) => Reflect.get(routerMap, key) || ''

@@ -39,6 +39,9 @@ const departmentSlice = createSlice({
 					!action.payload.some((target) => target === department._id)
 			)
 		},
+		deleteOneDepartment: (state, action: PayloadAction<string | number>) => {
+			return state.filter((department) => department._id != action.payload)
+		},
 	},
 })
 
@@ -47,6 +50,7 @@ export const {
 	addDepartment,
 	updateDepartment,
 	deleteManyDepartment,
+	deleteOneDepartment,
 } = departmentSlice.actions
 
 export default departmentSlice.reducer

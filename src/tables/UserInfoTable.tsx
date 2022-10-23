@@ -24,6 +24,7 @@ const ipColumns: TableColumn[] = [
 		field: 'network_type',
 	},
 	{ label: '状态', field: 'is_used' },
+	{ label: '启用时间', field: 'enable_time' },
 ]
 
 export const IpAddressInfoTable = (
@@ -33,7 +34,7 @@ export const IpAddressInfoTable = (
 const networkTypeColumns: TableColumn[] = [
 	{
 		label: '类型名称',
-		field: 'network_name',
+		field: 'network_type_name',
 	},
 	{
 		label: '开始地址',
@@ -56,20 +57,20 @@ const networkTypeColumns: TableColumn[] = [
 		field: 'dns',
 	},
 	{
-		label: 'ip已使用',
-		field: 'used_number',
+		label: '已使用 / 未使用 / 总数',
+		field: 'ip_use_detail',
 	},
-	{
-		label: 'ip未使用',
-		field: 'unused_number',
-	},
-	{
-		label: 'ip总数',
-		field: 'total_number',
-	},
+	// {
+	// 	label: 'ip未使用',
+	// 	field: 'unused_number',
+	// },
+	// {
+	// 	label: 'ip总数',
+	// 	field: 'total_number',
+	// },
 	{
 		label: '备注',
-		field: 'descript',
+		field: 'remark',
 		isSelect: false,
 	},
 ]

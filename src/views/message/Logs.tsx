@@ -11,10 +11,10 @@ const columns: TableColumn[] = [
 	{ label: '操作人', field: 'who' },
 	{ label: '对象', field: 'for_who' },
 	{ label: '事件', field: 'event' },
-	{ label: '原因', field: 'reason' },
+	{ label: '结果', field: 'state' },
 	{ label: '信息', field: 'message' },
-	{ label: '更新前', field: 'beforeUpdate' },
-	{ label: '更新后', field: 'afterUpdate' },
+	{ label: '更新前', field: 'before_update' },
+	{ label: '更新后', field: 'after_update' },
 ]
 
 const Logs = () => {
@@ -27,7 +27,12 @@ const Logs = () => {
 				if (find_logs) {
 					const { success, data } = find_logs
 
-					success && setLogs(data)
+					const logData = data.map((d: any) => ({
+						...d,
+						state: d.state ? '成功' : '失败',
+					}))
+
+					success && setLogs(logData)
 				}
 			})
 
@@ -124,23 +129,25 @@ const Logs = () => {
 							/>
 							<LogDetail lable="事件" value={Reflect.get(selectRow, 'event')} />
 							<LogDetail
-								lable="原因"
-								value={Reflect.get(selectRow, 'reason')}
+								lable="结果"
+								value={Reflect.get(selectRow, 'state') ? '成功' : '失败'}
 							/>
 							<LogDetail
 								lable="信息"
 								value={Reflect.get(selectRow, 'message')}
 							/>
 
-							<LogDetail
-								lable="更新内容"
-								value={
-									<DisplayUpdateContent
-										beforeUpdate={Reflect.get(selectRow, 'beforeUpdate')}
-										afterUpdate={Reflect.get(selectRow, 'afterUpdate')}
-									/>
-								}
-							/>
+							{Reflect.get(selectRow, 'event') === '更新' && (
+								<LogDetail
+									lable="更新内容"
+									value={
+										<DisplayUpdateContent
+											beforeUpdate={Reflect.get(selectRow, 'before_update')}
+											afterUpdate={Reflect.get(selectRow, 'after_update')}
+										/>
+									}
+								/>
+							)}
 						</div>
 					}
 					title={`详细`}

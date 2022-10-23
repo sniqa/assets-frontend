@@ -64,7 +64,7 @@ const settings: LeftSidebarItemProps = {
 }
 
 const LeftSidebarNav = () => {
-	const [shrink, setShrink] = useState(true)
+	const [shrink, setShrink] = useState(false)
 
 	return (
 		<div

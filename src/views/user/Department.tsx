@@ -27,13 +27,15 @@ import { useAppDispatch, useAppSelector } from '../../store'
 import {
 	addDepartment,
 	deleteManyDepartment,
+	deleteOneDepartment,
 	setDepartments,
 	updateDepartment,
 } from '../../store/department'
+import { DepartmentInfoWithId } from '../../types'
 
 const columns: TableColumn[] = [
 	{ label: '部门', field: 'department_name' },
-	{ label: '办公室', field: 'locations' },
+	{ label: '物理位置', field: 'locations' },
 ]
 
 const Department = () => {
@@ -68,9 +70,12 @@ const Department = () => {
 		() => ({
 			header: '操作',
 			cell: (value) => (
-				<Button
-					onClick={() => (setSelectRow(value), setOpenEditDialog(true))}
-				>{`编辑`}</Button>
+				<>
+					<Button
+						onClick={() => (setSelectRow(value), setOpenEditDialog(true))}
+					>{`编辑`}</Button>
+					<Button onClick={() => deleteDepartment(value)}>{`删除`}</Button>
+				</>
 			),
 		}),
 		[]
@@ -133,7 +138,7 @@ const Department = () => {
 	}
 
 	//删除
-	const deleteDepartment = async (ids: (string | number)[]) => {
+	const deleteDepartment = async (department: DepartmentInfoWithId) => {
 		const res = await confirm({
 			title: '提示',
 			message: '确定删除选中的项目？其他依赖此项的数据将会清空此项数据',
@@ -143,13 +148,17 @@ const Department = () => {
 			return
 		}
 
-		const { delete_department } = await _fetch({ delete_department: [ids] })
+		console.log(department)
+
+		const { delete_department } = await _fetch({
+			delete_department: department,
+		})
 
 		if (delete_department) {
 			const { success, data, errmsg } = delete_department
 
 			return success
-				? (dispatch(deleteManyDepartment(ids)),
+				? (dispatch(deleteOneDepartment(department._id)),
 				  notice({
 						status: 'success',
 						message: '删除成功',
@@ -173,7 +182,6 @@ const Department = () => {
 				rows={departmentRows}
 				extensions={extensions}
 				operate={operate}
-				onDeleteSelection={(ids) => deleteDepartment(ids)}
 			/>
 
 			{openDialog && (
@@ -245,7 +253,7 @@ const DialogContent = ({
 			/>
 
 			<DynamicInput
-				label="办公室"
+				label="物理位置"
 				value={departmentInfo.locations || ['']}
 				onChange={(val) => {
 					setDepartmentInfo({

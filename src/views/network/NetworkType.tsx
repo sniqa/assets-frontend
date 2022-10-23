@@ -24,7 +24,7 @@ import { setDevices } from '../../store/device'
 const addDialogContent: AddDialogContent[] = [
 	{
 		label: '网络类型名称',
-		field: 'network_name',
+		field: 'network_type_name',
 		required: true,
 	},
 	{
@@ -49,12 +49,21 @@ const addDialogContent: AddDialogContent[] = [
 	},
 	{
 		label: '备注',
-		field: 'descript',
+		field: 'remark',
 	},
 ]
 
 const NetworkType = () => {
-	const networkTypes = useAppSelector((state) => state.networkTypes)
+	const networkTypes = useAppSelector((state) =>
+		state.networkTypes.map((networkType) => {
+			const { unused_number, used_number, total_number, ...res } = networkType
+
+			return {
+				...res,
+				ip_use_detail: [used_number, unused_number, total_number].join(' - '),
+			}
+		})
+	)
 
 	const dispatch = useAppDispatch()
 
@@ -77,11 +86,11 @@ const NetworkType = () => {
 			header: '操作',
 			cell: (row: any) => (
 				<>
-					<Button
+					{/* <Button
 						size="small"
 						sx={{ fontSize: '0.4rem' }}
 						onClick={() => console.log(row)}
-					>{`编辑`}</Button>
+					>{`编辑`}</Button> */}
 					<Button
 						size="small"
 						sx={{ fontSize: '0.4rem' }}
